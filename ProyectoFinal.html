@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TRavelGT</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <style>
+   
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --verde:       #1a6e3c;
+      --verde-claro: #27a85a;
+      --dorado:      #c9a84c;
+      --dorado-light:#f0d080;
+      --azul-maya:   #1b3a5c;
+      --crema:       #faf6ee;
+      --texto:       #1c1c1c;
+      --gris:        #6b6b6b;
+      --borde:       #ddd;
+      --sombra:      0 8px 32px rgba(0,0,0,.12);
+    }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--crema);
+      color: var(--texto);
+      min-height: 100vh;
+    }
+    .dest-card-img{
+    width:100%;
+    height:220px;
+    overflow:hidden;
+    }
+
+  .dest-card-img img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    }
+    .hero-image{
+  width:100%;
+  height:320px;
+  overflow:hidden;
+  border-radius:20px;
+}
+
+.hero-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+    h1, h2, h3 { font-family: 'Playfair Display', serif; }
+
+  
+    .hidden   { display: none !important; }
+    .btn {
+      display: inline-block;
+      padding: 12px 28px;
+      border-radius: 4px;
+      font-family: 'Lato', sans-serif;
+      font-weight: 700;
+      font-size: .9rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      transition: all .25s;
+    }
+    .btn-primary   { background: var(--verde); color: #fff; }
+    .btn-primary:hover { background: var(--verde-claro); transform: translateY(-2px); }
+    .btn-gold      { background: var(--dorado); color: #fff; }
+    .btn-gold:hover{ background: var(--dorado-light); color: var(--texto); transform: translateY(-2px); }
+    .btn-outline   { background: transparent; color: var(--verde); border: 2px solid var(--verde); }
+    .btn-outline:hover { background: var(--verde); color: #fff; }
+    .btn-danger    { background: #c0392b; color: #fff; }
+    .btn-danger:hover { background: #e74c3c; }
+
+  
+    .view { display: none !important; }
+    .view.active { display: block !important; }
+    #view-login.active { display: flex !important; }
+
+  
+    #navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--azul-maya);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 64px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.3);
+    }
+    .nav-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; font-weight: 900;
+      color: var(--dorado);
+      letter-spacing: .04em;
+      cursor: pointer;
+    }
+    .nav-links { display: flex; gap: 8px; align-items: center; }
+    .nav-links button {
+      background: none; border: none;
+      color: #cce3f5; font-family: 'Lato', sans-serif;
+      font-size: .88rem; font-weight: 700;
+      letter-spacing: .06em; text-transform: uppercase;
+      padding: 8px 14px; border-radius: 4px;
+      cursor: pointer; transition: all .2s;
+    }
+    .nav-links button:hover,
+    .nav-links button.active { background: var(--verde); color: #fff; }
+    .nav-user {
+      display: flex; align-items: center; gap: 12px;
+      color: #cce3f5; font-size: .85rem;
+    }
+    .nav-badge {
+      background: var(--dorado); color: var(--azul-maya);
+      font-size: .7rem; font-weight: 900;
+      padding: 2px 8px; border-radius: 20px;
+      letter-spacing: .06em; text-transform: uppercase;
+    }
+
+    #view-login {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      background:
+        linear-gradient(135deg, rgba(27,58,92,.82) 0%, rgba(26,110,60,.75) 100%),
+        url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Tikal_temple1_2006_08_11.jpg/1280px-Tikal_temple1_2006_08_11.jpg')
+        center/cover no-repeat;
+    }
+    .login-card {
+      background: rgba(255,255,255,.97);
+      border-radius: 16px;
+      padding: 48px 44px;
+      width: 100%; max-width: 420px;
+      box-shadow: 0 24px 64px rgba(0,0,0,.35);
+      animation: fadeUp .5s ease;
+    }
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(24px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .login-logo {
+      text-align: center; margin-bottom: 28px;
+    }
+    .login-logo .flag { font-size: 2.5rem; }
+    .login-logo h1 { font-size: 1.9rem; color: var(--azul-maya); line-height: 1.1; margin-top: 6px; }
+    .login-logo p  { color: var(--gris); font-size: .85rem; margin-top: 4px; }
+
+    .tab-switch {
+      display: flex; border: 2px solid var(--verde);
+      border-radius: 8px; overflow: hidden; margin-bottom: 28px;
+    }
+    .tab-switch button {
+      flex: 1; padding: 10px;
+      background: none; border: none;
+      font-family: 'Lato', sans-serif;
+      font-weight: 700; font-size: .85rem;
+      text-transform: uppercase; letter-spacing: .06em;
+      cursor: pointer; color: var(--verde);
+      transition: all .2s;
+    }
+    .tab-switch button.active { background: var(--verde); color: #fff; }
+
+    .form-group { margin-bottom: 18px; }
+    .form-group label {
+      display: block; font-size: .82rem;
+      font-weight: 700; color: var(--azul-maya);
+      text-transform: uppercase; letter-spacing: .06em;
+      margin-bottom: 6px;
+    }
+    .form-group input, .form-group select {
+      width: 100%; padding: 11px 14px;
+      border: 2px solid var(--borde); border-radius: 6px;
+      font-family: 'Lato', sans-serif; font-size: .95rem;
+      color: var(--texto); background: #fff;
+      transition: border-color .2s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none; border-color: var(--verde);
+    }
+    .form-btn { width: 100%; padding: 14px; font-size: 1rem; border-radius: 8px; }
+    .login-error {
+      background: #fde8e8; border: 1px solid #e74c3c;
+      color: #c0392b; border-radius: 6px;
+      padding: 10px 14px; font-size: .88rem;
+      margin-bottom: 16px; text-align: center;
+    }
+    .demo-hint {
+      margin-top: 20px; padding: 14px;
+      background: #eef7f2; border-radius: 8px;
+      border-left: 4px solid var(--verde);
+    }
+    .demo-hint p { font-size: .78rem; color: var(--gris); line-height: 1.6; }
+    .demo-hint strong { color: var(--verde); }
+
+    #view-home { padding-top: 64px; }
+
+    .hero {
+      height: 92vh;
+      background:
+        linear-gradient(to bottom, rgba(27,58,92,.5) 0%, rgba(26,110,60,.65) 100%),
+        url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Tikal_temple1_2006_08_11.jpg/1280px-Tikal_temple1_2006_08_11.jpg')
+        center/cover no-repeat;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; color: #fff;
+    }
+    .hero-content { max-width: 760px; padding: 0 20px; animation: fadeUp .7s ease; }
+    .hero-content .subtitle {
+      font-size: .9rem; letter-spacing: .2em;
+      text-transform: uppercase; color: var(--dorado-light);
+      margin-bottom: 16px;
+    }
+    .hero-content h1 {
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      line-height: 1.1; margin-bottom: 20px;
+      text-shadow: 0 2px 16px rgba(0,0,0,.4);
+    }
+    .hero-content p {
+      font-size: 1.1rem; opacity: .92;
+      line-height: 1.7; margin-bottom: 32px;
+    }
+    .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+    .stats-bar {
+      background: var(--azul-maya);
+      display: flex; justify-content: center; gap: 0;
+      flex-wrap: wrap;
+    }
+    .stat-item {
+      padding: 24px 48px;
+      text-align: center; color: #fff;
+      border-right: 1px solid rgba(255,255,255,.12);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-item .num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; font-weight: 900;
+      color: var(--dorado);
+    }
+    .stat-item .lbl { font-size: .78rem; text-transform: uppercase; letter-spacing: .1em; opacity: .7; }
+
+    .section { padding: 80px 40px; max-width: 1200px; margin: 0 auto; }
+    .section-header { text-align: center; margin-bottom: 56px; }
+    .section-header .tag {
+      display: inline-block;
+      font-size: .78rem; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--verde); background: #eef7f2;
+      padding: 4px 14px; border-radius: 20px; margin-bottom: 10px;
+    }
+    .section-header h2 { font-size: 2.4rem; color: var(--azul-maya); margin-bottom: 12px; }
+    .section-header p  { color: var(--gris); font-size: 1rem; max-width: 560px; margin: 0 auto; line-height: 1.7; }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 28px;
+    }
+    .dest-card {
+      background: #fff; border-radius: 12px;
+      overflow: hidden; box-shadow: var(--sombra);
+      transition: transform .3s, box-shadow .3s;
+      cursor: pointer;
+    }
+    .dest-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(0,0,0,.18); }
+    .dest-card-img {
+      height: 220px; width: 100%; object-fit: cover;
+      background: #ddd;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 4rem;
+    }
+    .dest-card-body { padding: 20px 22px; }
+    .dest-card-body .region {
+      font-size: .72rem; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--verde); margin-bottom: 6px;
+    }
+    .dest-card-body h3 { font-size: 1.3rem; color: var(--azul-maya); margin-bottom: 8px; }
+    .dest-card-body p  { font-size: .88rem; color: var(--gris); line-height: 1.6; margin-bottom: 14px; }
+    .dest-card-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid var(--borde); padding-top: 14px;
+    }
+    .dest-card-footer .rating { color: var(--dorado); font-size: .88rem; }
+    .dest-card-footer .price { font-weight: 700; font-size: .9rem; color: var(--azul-maya); }
+
+    #view-destinos { padding-top: 64px; }
+    .page-header {
+      background: var(--azul-maya);
+      padding: 64px 40px;
+      text-align: center; color: #fff;
+    }
+    .page-header h2 { font-size: 2.6rem; margin-bottom: 10px; }
+    .page-header p { color: rgba(255,255,255,.7); font-size: 1rem; }
+    .breadcrumb {
+      display: flex; gap: 8px; align-items: center;
+      justify-content: center;
+      font-size: .8rem; color: rgba(255,255,255,.5);
+      margin-bottom: 12px;
+    }
+    .breadcrumb span { color: var(--dorado); }
+
+    .filter-bar {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      padding: 24px 40px; background: #fff;
+      border-bottom: 1px solid var(--borde);
+      justify-content: center;
+    }
+    .filter-btn {
+      padding: 8px 20px; border-radius: 20px;
+      border: 2px solid var(--borde);
+      background: none; cursor: pointer;
+      font-family: 'Lato', sans-serif;
+      font-size: .83rem; font-weight: 700;
+      color: var(--gris); transition: all .2s;
+      text-transform: uppercase; letter-spacing: .06em;
+    }
+    .filter-btn:hover,
+    .filter-btn.active { border-color: var(--verde); color: var(--verde); background: #eef7f2; }
+
+    .destinos-grid { padding: 48px 40px; max-width: 1200px; margin: 0 auto; }
+
+    #view-detalle { padding-top: 64px; }
+    .detalle-hero {
+      height: 55vh;
+      background: center/cover no-repeat;
+      display: flex; align-items: flex-end;
+      padding: 40px;
+      position: relative;
+    }
+    .detalle-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.7) 0%, transparent 60%);
+    }
+    .detalle-hero-content { position: relative; z-index: 1; color: #fff; }
+    .detalle-hero-content .region-tag {
+      display: inline-block;
+      background: var(--dorado); color: #fff;
+      font-size: .72rem; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    .detalle-hero-content h2 { font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.1; }
+
+    .detalle-body { max-width: 1100px; margin: 0 auto; padding: 48px 40px; }
+    .detalle-layout { display: grid; grid-template-columns: 1fr 340px; gap: 40px; }
+    .detalle-main h3 { font-size: 1.5rem; color: var(--azul-maya); margin-bottom: 14px; }
+    .detalle-main p { color: var(--gris); line-height: 1.8; margin-bottom: 24px; }
+    .highlights {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px;
+    }
+    .highlight-tag {
+      background: #eef7f2; color: var(--verde);
+      border: 1px solid #b2ddc5;
+      padding: 6px 14px; border-radius: 20px;
+      font-size: .8rem; font-weight: 700;
+    }
+    .info-card {
+      background: #fff; border-radius: 12px;
+      padding: 28px; box-shadow: var(--sombra);
+      position: sticky; top: 80px;
+    }
+    .info-card h4 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--azul-maya); margin-bottom: 18px; }
+    .info-row {
+      display: flex; justify-content: space-between;
+      align-items: center; padding: 12px 0;
+      border-bottom: 1px solid var(--borde);
+    }
+    .info-row:last-of-type { border-bottom: none; }
+    .info-row .lbl { font-size: .8rem; font-weight: 700; color: var(--gris); text-transform: uppercase; letter-spacing: .06em; }
+    .info-row .val { font-size: .9rem; color: var(--texto); font-weight: 600; }
+
+    #view-admin { padding-top: 64px; min-height: 100vh; background: #f0f4f8; }
+    .admin-layout { display: grid; grid-template-columns: 240px 1fr; min-height: calc(100vh - 64px); }
+    .admin-sidebar {
+      background: var(--azul-maya);
+      padding: 32px 0;
+    }
+    .sidebar-title {
+      color: var(--dorado); font-family: 'Playfair Display', serif;
+      font-size: 1rem; font-weight: 700;
+      padding: 0 24px 20px;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+      margin-bottom: 16px;
+    }
+    .sidebar-menu { list-style: none; }
+    .sidebar-menu li button {
+      width: 100%; text-align: left;
+      background: none; border: none;
+      color: rgba(255,255,255,.7);
+      padding: 12px 24px;
+      font-family: 'Lato', sans-serif;
+      font-size: .88rem; font-weight: 700;
+      letter-spacing: .06em; text-transform: uppercase;
+      cursor: pointer; transition: all .2s;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sidebar-menu li button:hover,
+    .sidebar-menu li button.active {
+      background: rgba(255,255,255,.1);
+      color: #fff; border-left: 3px solid var(--dorado);
+      padding-left: 21px;
+    }
+    .sidebar-menu .icon { font-size: 1.1rem; }
+
+    .admin-main { padding: 36px; overflow-y: auto; }
+    .admin-panel { display: none; }
+    .admin-panel.active { display: block; }
+    .admin-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem; color: var(--azul-maya);
+      margin-bottom: 6px;
+    }
+    .admin-subtitle { color: var(--gris); font-size: .9rem; margin-bottom: 32px; }
+
+    .kpi-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px; margin-bottom: 36px;
+    }
+    .kpi-card {
+      background: #fff; border-radius: 10px;
+      padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,.06);
+      border-left: 4px solid var(--verde);
+    }
+    .kpi-card.gold  { border-color: var(--dorado); }
+    .kpi-card.blue  { border-color: var(--azul-maya); }
+    .kpi-card.red   { border-color: #e74c3c; }
+    .kpi-card .kpi-val {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem; font-weight: 900; color: var(--azul-maya);
+    }
+    .kpi-card .kpi-lbl { font-size: .78rem; text-transform: uppercase; letter-spacing: .1em; color: var(--gris); margin-top: 4px; }
+
+    .admin-table-card {
+      background: #fff; border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+      overflow: hidden;
+    }
+    .table-header {
+      padding: 20px 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--borde);
+    }
+    .table-header h4 { font-size: 1rem; color: var(--azul-maya); }
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: #f8fafc; }
+    th {
+      padding: 12px 18px; text-align: left;
+      font-size: .75rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: var(--gris); border-bottom: 1px solid var(--borde);
+    }
+    td {
+      padding: 14px 18px; font-size: .88rem;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #fafbfd; }
+    .badge {
+      display: inline-block; padding: 3px 10px;
+      border-radius: 20px; font-size: .72rem; font-weight: 700;
+    }
+    .badge-green { background: #d4edda; color: #155724; }
+    .badge-yellow{ background: #fff3cd; color: #856404; }
+    .badge-red   { background: #f8d7da; color: #721c24; }
+    .badge-blue  { background: #cce5ff; color: #004085; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .form-grid .span-2 { grid-column: 1 / -1; }
+    .form-card {
+      background: #fff; border-radius: 10px;
+      padding: 32px; box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    }
+    .form-card h4 { font-size: 1.1rem; color: var(--azul-maya); margin-bottom: 24px; }
+    .form-card textarea {
+      width: 100%; padding: 11px 14px;
+      border: 2px solid var(--borde); border-radius: 6px;
+      font-family: 'Lato', sans-serif; font-size: .95rem;
+      resize: vertical; min-height: 100px;
+    }
+    .form-card textarea:focus { outline: none; border-color: var(--verde); }
+
+
+    #view-cliente { padding-top: 64px; min-height: 100vh; }
+    .cliente-header {
+      background: linear-gradient(135deg, var(--azul-maya), var(--verde));
+      color: #fff; padding: 48px 40px;
+    }
+    .cliente-header .welcome { font-size: .85rem; opacity: .7; letter-spacing: .1em; text-transform: uppercase; }
+    .cliente-header h2 { font-size: 2rem; margin-top: 6px; }
+
+    .cliente-content { max-width: 1100px; margin: 0 auto; padding: 40px; }
+    .cliente-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .cliente-section-title {
+      font-size: 1.3rem; color: var(--azul-maya);
+      margin-bottom: 18px; padding-bottom: 10px;
+      border-bottom: 2px solid var(--dorado);
+      display: inline-block;
+    }
+    .fav-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .fav-card {
+      background: #fff; border-radius: 10px;
+      overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,.08);
+      transition: transform .2s;
+    }
+    .fav-card:hover { transform: translateY(-4px); }
+    .fav-card-img{
+  width:100%;
+  height:120px;
+  overflow:hidden;
+}
+
+.fav-card-img img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+    .fav-card-body { padding: 14px; }
+    .fav-card-body h4 { font-size: .95rem; color: var(--azul-maya); margin-bottom: 4px; }
+    .fav-card-body p  { font-size: .78rem; color: var(--gris); }
+
+    .profile-card {
+      background: #fff; border-radius: 12px;
+      padding: 28px; box-shadow: 0 2px 12px rgba(0,0,0,.08);
+    }
+    .profile-avatar {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--verde), var(--azul-maya));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; color: #fff; font-family: 'Playfair Display', serif;
+      font-weight: 900; margin-bottom: 14px;
+    }
+    .profile-card h3 { font-size: 1.2rem; color: var(--azul-maya); }
+    .profile-card .email { color: var(--gris); font-size: .85rem; margin-bottom: 18px; }
+    .profile-form .form-group { margin-bottom: 14px; }
+
+    footer {
+      background: var(--azul-maya); color: rgba(255,255,255,.7);
+      text-align: center; padding: 28px 20px;
+      font-size: .82rem; margin-top: 60px;
+    }
+    footer strong { color: var(--dorado); }
+
+   
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,.55); align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: #fff; border-radius: 14px;
+      padding: 36px; max-width: 440px; width: 90%;
+      animation: fadeUp .3s ease;
+    }
+    .modal h3 { font-size: 1.4rem; color: var(--azul-maya); margin-bottom: 8px; }
+    .modal p  { color: var(--gris); font-size: .9rem; margin-bottom: 22px; line-height: 1.6; }
+    .modal-btns { display: flex; gap: 12px; }
+
+    .notif {
+      position: fixed; bottom: 28px; right: 28px; z-index: 300;
+      background: var(--verde); color: #fff;
+      padding: 14px 22px; border-radius: 8px;
+      font-size: .9rem; font-weight: 700;
+      box-shadow: 0 8px 24px rgba(0,0,0,.2);
+      transform: translateY(80px); opacity: 0;
+      transition: all .35s;
+    }
+    .notif.show { transform: translateY(0); opacity: 1; }
+
+    @media(max-width:768px) {
+      #navbar { padding: 0 16px; }
+      .nav-links { display: none; }
+      .section { padding: 48px 20px; }
+      .detalle-layout { grid-template-columns: 1fr; }
+      .admin-layout { grid-template-columns: 1fr; }
+      .admin-sidebar { display: none; }
+      .cliente-grid { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+    
+  </style>
+</head>
+<body>
+
+<nav id="navbar" class="hidden">
+  <div class="nav-brand" onclick="goHome()">🌋 Descubre Guatemala</div>
+  <div class="nav-links" id="nav-links">
+    <button onclick="showView('home')" id="nav-home">Inicio</button>
+    <button onclick="showView('destinos')" id="nav-destinos">Destinos</button>
+    <button onclick="showView('cliente')" id="nav-cliente" class="hidden">Mi Cuenta</button>
+    <button onclick="showView('admin')" id="nav-admin" class="hidden">Admin</button>
+  </div>
+  <div class="nav-user">
+    <span id="nav-username"></span>
+    <span class="nav-badge hidden" id="nav-role-badge"></span>
+    <button class="btn btn-outline" style="padding:6px 16px;font-size:.8rem;" onclick="logout()">Salir</button>
+  </div>
+</nav>
+
+<div class="notif" id="notif"></div>
+
+
+<div id="view-login" class="view active">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="flag">TravelGT</div>
+      <h1>Descubre Guatemala</h1>
+      <p>No sabes a donde ir, entra y dejate llevar</p>
+    </div>
+
+    <div class="tab-switch" id="login-tabs">
+      <button class="active" onclick="switchLoginTab('login')">Ingresar</button>
+      <button onclick="switchLoginTab('register')">Registrarse</button>
+    </div>
+
+    <!-- FORMULARIO DE INICIO DE SESION -->
+    <div id="login-form">
+      <div id="login-error" class="login-error hidden">Usuario o contraseña incorrectos.</div>
+      <div class="form-group">
+        <label>Correo electrónico</label>
+        <input type="email" id="login-email" placeholder="correo@ejemplo.com" value="admin@guatemala.com"/>
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" id="login-pass" placeholder="••••••••" value="admin123"/>
+      </div>
+      <button class="btn btn-primary form-btn" onclick="doLogin()">Entrar al sitio</button>
+    </div>
+
+    <!-- FORMULARIO DE REGISTRO-->
+    <div id="register-form" class="hidden">
+      <div class="form-group">
+        <label>Nombre completo</label>
+        <input type="text" id="reg-name" placeholder="Tu nombre"/>
+      </div>
+      <div class="form-group">
+        <label>Correo electrónico</label>
+        <input type="email" id="reg-email" placeholder="correo@ejemplo.com"/>
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" id="reg-pass" placeholder="Mínimo 6 caracteres"/>
+      </div>
+      <button class="btn btn-primary form-btn" onclick="doRegister()">Crear cuenta</button>
+    </div>
+  </div>
+</div>
+
+<!-- VISTA DE PAGINA PRINCIPAL-->
+<div id="view-home" class="view">
+  <div class="hero">
+    <div class="hero-content">
+      <div class="subtitle">✦ Corazón de Mesoamérica ✦</div>
+      <h1>Un país de leyendas, volcanes y colores</h1>
+      <p>Desde la majestuosidad de Tikal hasta la serenidad del Lago Atitlán, Guatemala te espera con paisajes que transforman el alma.</p>
+      <div class="hero-btns">
+        <button class="btn btn-gold" onclick="showView('destinos')">Explorar Destinos</button>
+        <button class="btn btn-outline" style="color:#fff;border-color:#fff;" onclick="showView('destinos')">Ver el mapa</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-item"><div class="num">22</div><div class="lbl">Departamentos</div></div>
+    <div class="stat-item"><div class="num">3</div><div class="lbl">Sitios UNESCO</div></div>
+    <div class="stat-item"><div class="num">37</div><div class="lbl">Volcanes</div></div>
+    <div class="stat-item"><div class="num">24</div><div class="lbl">Idiomas Mayas</div></div>
+    <div class="stat-item"><div class="num">+200</div><div class="lbl">Destinos</div></div>
+  </div>
+
+  <div style="max-width:1200px;margin:0 auto;">
+    <div class="section">
+      <div class="section-header">
+        <div class="tag">Lugares imperdibles</div>
+        <h2>Destinos más visitados</h2>
+        <p>Descubre los rincones más fascinantes del país eterno, tierra de bosques, ruinas y tradiciones vivas.</p>
+      </div>
+      <div class="cards-grid" id="home-cards"></div>
+      <div style="text-align:center;margin-top:40px;">
+        <button class="btn btn-primary" onclick="showView('destinos')">Ver todos los destinos →</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--azul-maya);color:#fff;padding:80px 40px;text-align:center;">
+    <h2 style="font-size:2.2rem;margin-bottom:14px;">¿Listo para tu aventura?</h2>
+    <p style="opacity:.7;max-width:480px;margin:0 auto 28px;line-height:1.7;">Guatemala te ofrece experiencias auténticas que permanecen para siempre en la memoria.</p>
+    <button class="btn btn-gold" onclick="showView('destinos')">Planifica tu viaje</button>
+  </div>
+
+  <footer>
+    <strong>Descubre Guatemala</strong> &copy; 2025 — Turismo auténtico, cultura viva.
+  </footer>
+</div>
+
+<!-- VISTA SECCIÓN DESTINOS -->
+<div id="view-destinos" class="view">
+  <div class="page-header">
+    <div class="breadcrumb">Inicio <span>/</span> Destinos</div>
+    <h2>Todos los Destinos</h2>
+    <p>Explora los lugares más increíbles de Guatemala</p>
+  </div>
+
+  <div class="filter-bar" id="filter-bar"></div>
+
+  <div class="destinos-grid">
+    <div class="cards-grid" id="destinos-cards"></div>
+  </div>
+
+  <footer>
+    <strong>Descubre Guatemala</strong> &copy; 2025 — Turismo auténtico, cultura viva.
+  </footer>
+</div>
+
+<!-- VISTA DE DETALLES -->
+<div id="view-detalle" class="view">
+  <div class="detalle-hero" id="detalle-hero">
+    <div class="detalle-hero-content">
+      <span class="region-tag" id="detalle-region">Región</span>
+      <h2 id="detalle-titulo">Nombre del Destino</h2>
+    </div>
+  </div>
+
+  <div class="detalle-body">
+    <button class="btn btn-outline" onclick="showView('destinos')" style="margin-bottom:28px;">← Volver a Destinos</button>
+    <div class="detalle-layout">
+      <div class="detalle-main">
+        <h3 id="detalle-subtitle">Descripción</h3>
+        <p id="detalle-desc"></p>
+        <div id="detalle-highlights" class="highlights"></div>
+        <p id="detalle-extra" style="color:var(--gris);line-height:1.8;"></p>
+      </div>
+      <div class="info-card">
+        <h4>Información práctica</h4>
+        <div class="info-row"><span class="lbl">Región</span><span class="val" id="info-region"></span></div>
+        <div class="info-row"><span class="lbl">Clima</span><span class="val" id="info-clima"></span></div>
+        <div class="info-row"><span class="lbl">Mejor época</span><span class="val" id="info-epoca"></span></div>
+        <div class="info-row"><span class="lbl">Dificultad</span><span class="val" id="info-dif"></span></div>
+        <div class="info-row"><span class="lbl">Entrada</span><span class="val" id="info-entrada"></span></div>
+        <div style="margin-top:20px;">
+          <button class="btn btn-primary" style="width:100%;margin-bottom:10px;" onclick="showNotif('¡Destino guardado en favoritos!')">♥ Guardar favorito</button>
+          <button class="btn btn-outline" style="width:100%;" onclick="showNotif('Compartiendo destino...')">↗ Compartir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <strong>Descubre Guatemala</strong> &copy; 2025
+  </footer>
+</div>
+
+<!-- VISTA DE ADMINISTRADOR -->
+<div id="view-admin" class="view">
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="sidebar-title">Panel de Administración</div>
+      <ul class="sidebar-menu">
+        <li><button class="active" onclick="adminPanel('dashboard')" id="sb-dashboard"><span class="icon">📊</span> Dashboard</button></li>
+        <li><button onclick="adminPanel('usuarios')" id="sb-usuarios"><span class="icon">👥</span> Usuarios</button></li>
+        <li><button onclick="adminPanel('destinos-admin')" id="sb-destinos-admin"><span class="icon">🗺️</span> Destinos</button></li>
+        <li><button onclick="adminPanel('nuevo-destino')" id="sb-nuevo-destino"><span class="icon">➕</span> Nuevo Destino</button></li>
+        <li><button onclick="logout()" style="color:rgba(255,100,100,.8)!important;"><span class="icon">🚪</span> Cerrar sesión</button></li>
+      </ul>
+    </aside>
+
+    <main class="admin-main">
+
+      <!-- Dashboard -->
+      <div class="admin-panel active" id="panel-dashboard">
+        <h2 class="admin-title">Dashboard</h2>
+        <p class="admin-subtitle">Resumen general del sitio</p>
+        <div class="kpi-grid">
+          <div class="kpi-card"><div class="kpi-val" id="kpi-users">—</div><div class="kpi-lbl">Usuarios registrados</div></div>
+          <div class="kpi-card gold"><div class="kpi-val" id="kpi-dest">—</div><div class="kpi-lbl">Destinos publicados</div></div>
+          <div class="kpi-card blue"><div class="kpi-val">1,240</div><div class="kpi-lbl">Visitas este mes</div></div>
+          <div class="kpi-card red"><div class="kpi-val">3</div><div class="kpi-lbl">Pendientes revisión</div></div>
+        </div>
+        <div class="admin-table-card">
+          <div class="table-header"><h4>Actividad reciente</h4></div>
+          <table>
+            <thead><tr><th>Acción</th><th>Usuario</th><th>Fecha</th><th>Estado</th></tr></thead>
+            <tbody>
+              <tr><td>Nuevo registro</td><td>maria@correo.com</td><td>Hoy 09:14</td><td><span class="badge badge-green">OK</span></td></tr>
+              <tr><td>Destino editado</td><td>admin</td><td>Hoy 08:30</td><td><span class="badge badge-blue">Info</span></td></tr>
+              <tr><td>Comentario pendiente</td><td>pedro@correo.com</td><td>Ayer 17:22</td><td><span class="badge badge-yellow">Pendiente</span></td></tr>
+              <tr><td>Usuario bloqueado</td><td>spam@test.com</td><td>Ayer 11:05</td><td><span class="badge badge-red">Bloqueado</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Usuarios -->
+      <div class="admin-panel" id="panel-usuarios">
+        <h2 class="admin-title">Gestión de Usuarios</h2>
+        <p class="admin-subtitle">Administra las cuentas del sistema</p>
+        <div class="admin-table-card">
+          <div class="table-header">
+            <h4>Usuarios registrados</h4>
+            <button class="btn btn-primary" style="padding:8px 18px;" onclick="showModal('addUser')">+ Agregar</button>
+          </div>
+          <table>
+            <thead><tr><th>#</th><th>Nombre</th><th>Correo</th><th>Rol</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody id="admin-users-table"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Administrador seccion Destinos -->
+      <div class="admin-panel" id="panel-destinos-admin">
+        <h2 class="admin-title">Gestión de Destinos</h2>
+        <p class="admin-subtitle">Administra los lugares turísticos del sitio</p>
+        <div class="admin-table-card">
+          <div class="table-header">
+            <h4>Destinos publicados</h4>
+            <button class="btn btn-primary" style="padding:8px 18px;" onclick="adminPanel('nuevo-destino')">+ Nuevo</button>
+          </div>
+          <table>
+            <thead><tr><th>Nombre</th><th>Región</th><th>Categoría</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody id="admin-dest-table"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Nuevo Destino -->
+      <div class="admin-panel" id="panel-nuevo-destino">
+        <h2 class="admin-title">Agregar Nuevo Destino</h2>
+        <p class="admin-subtitle">Completa la información del lugar turístico</p>
+        <div class="form-card">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Nombre del destino</label>
+              <input type="text" id="nd-nombre" placeholder="ej. Lago Atitlán"/>
+            </div>
+            <div class="form-group">
+              <label>Región / Departamento</label>
+              <input type="text" id="nd-region" placeholder="ej. Sololá"/>
+            </div>
+            <div class="form-group">
+              <label>Categoría</label>
+              <select id="nd-cat">
+                <option>Natural</option>
+                <option>Arqueológico</option>
+                <option>Cultural</option>
+                <option>Colonial</option>
+                <option>Aventura</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Emoji / Ícono</label>
+              <input type="text" id="nd-emoji" placeholder="ej. 🌋" maxlength="4"/>
+            </div>
+            <div class="form-group span-2">
+              <label>Descripción corta</label>
+              <input type="text" id="nd-desc-short" placeholder="Descripción breve para las tarjetas"/>
+            </div>
+            <div class="form-group span-2">
+              <label>Descripción completa</label>
+              <textarea id="nd-desc-full" placeholder="Descripción detallada del destino..."></textarea>
+            </div>
+            <div class="form-group">
+              <label>Clima</label>
+              <input type="text" id="nd-clima" placeholder="ej. Templado húmedo"/>
+            </div>
+            <div class="form-group">
+              <label>Mejor época para visitar</label>
+              <input type="text" id="nd-epoca" placeholder="ej. Nov – Abril"/>
+            </div>
+            <div class="form-group">
+              <label>Dificultad de acceso</label>
+              <select id="nd-dif">
+                <option>Fácil</option>
+                <option>Moderada</option>
+                <option>Difícil</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Entrada / Precio aprox.</label>
+              <input type="text" id="nd-precio" placeholder="ej. Q50 / Gratis"/>
+            </div>
+          </div>
+          <div style="margin-top:20px;display:flex;gap:12px;">
+            <button class="btn btn-primary" onclick="saveDestino()">✓ Publicar destino</button>
+            <button class="btn btn-outline" onclick="adminPanel('destinos-admin')">Cancelar</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Vista visitante -->
+<div id="view-cliente" class="view">
+  <div class="cliente-header">
+    <div class="welcome">Bienvenido de vuelta</div>
+    <h2 id="cliente-nombre">Viajero</h2>
+    <p style="opacity:.7;margin-top:6px;" id="cliente-email">email@correo.com</p>
+  </div>
+
+  <div class="cliente-content">
+    <div class="cliente-grid">
+      <div>
+        <h3 class="cliente-section-title">Mis Favoritos</h3>
+        <div class="fav-grid" id="fav-grid"></div>
+      </div>
+      <div>
+        <h3 class="cliente-section-title">Mi Perfil</h3>
+        <div class="profile-card">
+          <div class="profile-avatar" id="profile-avatar">A</div>
+          <h3 id="profile-name">Nombre</h3>
+          <p class="email" id="profile-email">email</p>
+          <div class="profile-form">
+            <div class="form-group">
+              <label>Nombre</label>
+              <input type="text" id="edit-name" placeholder="Tu nombre completo"/>
+            </div>
+            <div class="form-group">
+              <label>Teléfono</label>
+              <input type="text" placeholder="+502 0000-0000"/>
+            </div>
+            <div class="form-group">
+              <label>Ciudad</label>
+              <input type="text" placeholder="Guatemala City"/>
+            </div>
+            <button class="btn btn-primary" onclick="showNotif('¡Perfil actualizado!')">Guardar cambios</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:40px;">
+      <h3 class="cliente-section-title">Destinos recomendados para ti</h3>
+      <div class="cards-grid" id="rec-cards" style="margin-top:18px;"></div>
+    </div>
+  </div>
+
+  <footer>
+    <strong>Descubre Guatemala</strong> &copy; 2025
+  </footer>
+</div>
+
+<!-- AGREGAR USUARIO -->
+<div class="modal-overlay" id="modal-addUser">
+  <div class="modal">
+    <h3>Agregar Usuario</h3>
+    <p>Completa los datos del nuevo usuario del sistema.</p>
+    <div class="form-group"><label>Nombre</label><input type="text" id="m-name" placeholder="Nombre completo"/></div>
+    <div class="form-group"><label>Correo</label><input type="email" id="m-email" placeholder="correo@ejemplo.com"/></div>
+    <div class="form-group"><label>Contraseña</label><input type="password" id="m-pass" placeholder="••••••••"/></div>
+    <div class="form-group"><label>Rol</label>
+      <select id="m-rol"><option value="cliente">Cliente</option><option value="admin">Admin</option></select>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-primary" onclick="addUser()">Crear usuario</button>
+      <button class="btn btn-outline" onclick="closeModal('addUser')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Script -->
+<script>
+// ============ DATA ============
+let usuarios = [
+  { id:1, name:'Administrador', email:'admin@guatemala.com',   pass:'admin123',   rol:'admin',   estado:'activo' },
+  { id:2, name:'Ennio Muños',  email:'Emuñoz@guatemala.com', pass:'cliente123', rol:'cliente', estado:'activo' },
+  { id:3, name:'Ana Patricia',  email:'Apatricia@correo.com',      pass:'pass123',    rol:'cliente', estado:'activo' },
+  { id:3, name:'Emanuel Catalan',  email:'ecatalan@correo.com',      pass:'pass123',    rol:'cliente', estado:'activo' },
+];
+let nextUserId = 4;
+
+const DESTINOS = [
+  {
+    id:1, nombre:'Tikal', region:'Petén', cat:'Arqueológico', imgCard:'Imagenes/Peten.jpg', imgDetalle:'Imagenes/PetenPortada.jpg',
+    descCorta:'Ciudad maya perdida en la selva, Patrimonio de la Humanidad UNESCO.',
+    descFull:'Tikal fue una de las ciudades mayas más poderosas de la era clásica. Sus templos se elevan por encima del dosel de la selva tropical, creando un panorama místico que te transporta miles de años atrás.',
+    extra:'El Templo I (Templo del Gran Jaguar) y el Templo IV son los más impresionantes. La fauna local incluye monos, tucanes y jaguares. Se recomienda amanecer en el complejo para escuchar la selva despertar.',
+    highlights:['Patrimonio UNESCO','Selva tropical','Amanecer mágico','Fauna silvestre'],
+    clima:'Cálido húmedo', epoca:'Nov – Mayo', dif:'Moderada', entrada:'Q150 extranjeros',
+    bg:'linear-gradient(135deg,#2d5a1b,#1a3d0a)', rating:'★★★★★', visitas:'125,000/año'
+  },
+  {
+    id:2, nombre:'Lago Atitlán', region:'Sololá', cat:'Natural', imgCard:'Imagenes/Atitlan.jpg', imgDetalle:'Imagenes/AtitlanPortada.gif',
+    descCorta:'El lago más hermoso del mundo, rodeado de tres volcanes y pueblos indígenas.',
+    descFull:'El Lago Atitlán, ubicado a 1562 metros sobre el nivel del mar, es uno de los destinos más fotogénicos de Guatemala. Aldous Huxley lo llamó "el lago más hermoso del mundo".',
+    extra:'Los pueblos de San Pedro la Laguna, Santiago Atitlán y Panajachel ofrecen artesanías únicas, textiles coloridos y gastronomía local. Las actividades incluyen kayak, senderismo al volcán San Pedro y visitas a los mercados mayas.',
+    highlights:['3 volcanes','Pueblos mayas','Artesanías','Kayak y deportes'],
+    clima:'Templado fresco', epoca:'Todo el año', dif:'Fácil', entrada:'Libre (lanchas Q25)',
+    bg:'linear-gradient(135deg,#1a5276,#0e3d6b)', rating:'★★★★★', visitas:'180,000/año'
+  },
+  {
+    id:3, nombre:'Antigua Guatemala', region:'Sacatepéquez', cat:'Colonial', imgCard:'Imagenes/Antigua.jpg', imgDetalle:'Imagenes/AntiguaPortada.jpg',
+    descCorta:'Ciudad colonial Patrimonio UNESCO con iglesias barrocas y calles adoquinadas.',
+    descFull:'La Antigua Guatemala, fundada en 1543, es una de las ciudades coloniales mejor conservadas de América Latina. Sus ruinas de conventos e iglesias barrocas cuentan historias de conquista, fe y terremotos.',
+    extra:'La Semana Santa en Antigua es un espectáculo mundial. Las alfombras de aserrín teñido y los desfiles religiosos atraen visitantes de todo el planeta. El Mercado de Artesanías y el Parque Central son paradas obligatorias.',
+    highlights:['Patrimonio UNESCO','Semana Santa','Arquitectura barroca','Gastronomía'],
+    clima:'Templado agradable', epoca:'Todo el año', dif:'Fácil', entrada:'Libre',
+    bg:'linear-gradient(135deg,#7d3c98,#4a235a)', rating:'★★★★★', visitas:'250,000/año'
+  },
+  {
+    id:4, nombre:'Volcán Pacaya', region:'Escuintla', cat:'Aventura', imgCard:'Imagenes/Pacaya.jpg', imgDetalle:'Imagenes/PacayaPortada.jpg',
+    descCorta:'Volcán activo accesible donde puedes tocar lava y vivir una experiencia única.',
+    descFull:'El Volcán Pacaya es uno de los volcanes más activos de Centroamérica. A tan solo 50 km de Ciudad de Guatemala, ofrece una experiencia volcánica única: caminar sobre flujos de lava solidificada y observar fumarolas activas.',
+    extra:'El ascenso dura entre 2 y 3 horas y se pueden contratar guías locales. Llevar ropa abrigada ya que en la cima las temperaturas bajan considerablemente. Los amaneceres y atardeceres desde la cima son espectaculares.',
+    highlights:['Lava activa','Caminata 3h','Vista 360°','Guías locales'],
+    clima:'Variable (frío en cima)', epoca:'Nov – Abril', dif:'Moderada', entrada:'Q50',
+    bg:'linear-gradient(135deg,#922b21,#641e16)', rating:'★★★★☆', visitas:'80,000/año'
+  },
+  {
+    id:5, nombre:'Chichicastenango', region:'Quiché', cat:'Cultural', imgCard:'Imagenes/Chichicastenango.jpg', imgDetalle:'Imagenes/IglesiaCatolica.jpg',
+    descCorta:'El mercado indígena más colorido y auténtico de Guatemala.',
+    descFull:'El mercado de Chichicastenango, conocido como "Chichi", es el mercado indígena más grande y colorido de Centroamérica. Cada jueves y domingo, miles de vendedores k\'iche\' llenan las calles con textiles, máscaras, artesanías y productos locales.',
+    extra:'La Iglesia de Santo Tomás es única: los sacerdotes mayas realizan ceremonias en sus escalinatas, quemando incienso junto a las ceremonias católicas. El Popol Vuh, libro sagrado maya, fue descubierto aquí.',
+    highlights:['Mercado jueves y domingo','Textiles mayas','Ceremonia K\'iche\'','Artesanías únicas'],
+    clima:'Fresco de montaña', epoca:'Todo el año', dif:'Fácil', entrada:'Libre',
+    bg:'linear-gradient(135deg,#b7770d,#7d5a0c)', rating:'★★★★★', visitas:'95,000/año'
+  },
+  {
+    id:6, nombre:'Semuc Champey', region:'Alta Verapaz', cat:'Natural', imgCard:'Imagenes/Semuc.jpg', imgDetalle:'Imagenes/SemucPortada.jpg',
+    descCorta:'Piscinas naturales de agua turquesa en medio de la selva tropical.',
+    descFull:'Semuc Champey es uno de los secretos mejor guardados de Guatemala. Sobre el Río Cahabón, una plataforma natural de piedra calcárea de 300 metros forma una serie de piscinas escalonadas de aguas cristalinas en tonos turquesa y verde esmeralda.',
+    extra:'Se accede desde el pueblo de Lanquín por caminos de tierra. Las actividades incluyen tubing en el río, exploración de cuevas con velas y senderismo al mirador. La biodiversidad del área es impresionante con cientos de especies de aves.',
+    highlights:['Piscinas turquesa','Tubing','Cuevas','Selva virgen'],
+    clima:'Cálido húmedo', epoca:'Marzo – Junio', dif:'Difícil (acceso)', entrada:'Q50',
+    bg:'linear-gradient(135deg,#148f77,#0e6655)', rating:'★★★★★', visitas:'60,000/año'
+  },
+  {
+    id:7,
+    nombre:'Laguna Magdalena',
+    region:'Huehuetenango',
+    cat:'Natural',
+    imgCard:'Imagenes/HuehuetenangoPortada.png',
+    imgDetalle:'Imagenes/LagunaMagdalena.jpeg',
+    descCorta:'Hermosa laguna rodeada de montañas y naturaleza en el altiplano guatemalteco.',
+    descFull:'La Laguna Magdalena es uno de los destinos naturales más impresionantes de Huehuetenango. Sus aguas tranquilas reflejan el paisaje montañoso y crean un ambiente relajante ideal para quienes buscan contacto con la naturaleza y tranquilidad lejos de la ciudad.',
+    extra:'La laguna es conocida por su clima fresco y sus paisajes rodeados de bosques y montañas. Los visitantes pueden disfrutar caminatas, fotografía y recorridos en los alrededores mientras observan aves y la belleza natural de la región. Los amaneceres y atardeceres ofrecen vistas espectaculares.',
+    highlights:['Paisaje montañoso','Clima fresco','Naturaleza tranquila','Atardeceres espectaculares'],
+    clima:'Frío templado',
+    epoca:'Oct – Abril',
+    dif:'Fácil',
+    entrada:'Q10 nacionales',
+    bg:'linear-gradient(135deg,#1f4d5a,#0d2d35)',
+    rating:'★★★★★',
+    visitas:'18,000/año'
+  },
+  {
+    id:8,
+    nombre:'Laguna de Chicabal',
+    region:'Quetzaltenango',
+    cat:'Natural',
+    imgCard:'Imagenes/Quetzaltenango.png',
+    imgDetalle:'Imagenes/LaguanChicavalPortada.png',
+    descCorta:'Laguna sagrada rodeada de bosque nuboso y ubicada en el cráter de un volcán.',
+    descFull:'La Laguna de Chicabal es uno de los destinos naturales y espirituales más importantes de Guatemala. Situada dentro del cráter del Volcán Chicabal, esta laguna destaca por su ambiente místico, sus senderos rodeados de bosque nuboso y la tranquilidad que ofrece a los visitantes.',
+    extra:'La laguna es considerada un lugar sagrado para la cultura maya mam, donde aún se realizan ceremonias tradicionales. El recorrido incluye caminatas entre naturaleza, miradores y una larga escalinata que conduce hasta la orilla de la laguna. La neblina y el clima fresco crean un paisaje único durante gran parte del año.',
+    highlights:['Laguna sagrada','Bosque nuboso','Senderismo','Cultura maya mam'],
+    clima:'Frío húmedo',
+    epoca:'Nov – Abril',
+    dif:'Moderada',
+    entrada:'Q25 nacionales',
+    bg:'linear-gradient(135deg,#355c3a,#1b2f1d)',
+    rating:'★★★★★',
+    visitas:'35,000/año'
+  },
+  {
+    id:9,
+    nombre:'Cueva de Anda Mirá',
+    region:'Jutiapa',
+    cat:'Aventura',
+    imgCard:'Imagenes/CuevasPortada.gif',
+    imgDetalle:'Imagenes/CuevasPortada.jpg',
+    descCorta:'Impresionante cueva natural rodeada de paisajes rocosos y naturaleza oriental.',
+    descFull:'La Cueva de Anda Mirá es uno de los atractivos naturales más interesantes de Jutiapa. Este destino destaca por sus formaciones rocosas, su ambiente misterioso y la experiencia de exploración que ofrece a los visitantes que disfrutan del turismo de aventura y contacto con la naturaleza.',
+    extra:'El recorrido hacia la cueva permite apreciar paisajes secos característicos del oriente de Guatemala. En el interior pueden observarse formaciones naturales creadas por la humedad y el paso del tiempo. Es un lugar ideal para caminatas, fotografía y exploración, especialmente durante la temporada seca.',
+    highlights:['Turismo de aventura','Formaciones rocosas','Exploración natural','Paisajes orientales'],
+    clima:'Cálido seco',
+    epoca:'Nov – Abril',
+    dif:'Moderada',
+    entrada:'Q15 nacionales',
+    bg:'linear-gradient(135deg,#6a4a2f,#3b2415)',
+    rating:'★★★★☆',
+    visitas:'12,000/año'
+}
+];
+
+let currentUser  = null;
+let currentDest  = null;
+let activeFilter = 'Todos';
+
+
+function doLogin(){
+  const email = document.getElementById('login-email').value.trim();
+  const pass  = document.getElementById('login-pass').value.trim();
+  const user  = usuarios.find(u => u.email===email && u.pass===pass);
+  if(!user){ document.getElementById('login-error').classList.remove('hidden'); return; }
+  document.getElementById('login-error').classList.add('hidden');
+  currentUser = user;
+  afterLogin();
+}
+
+function doRegister(){
+  const name  = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const pass  = document.getElementById('reg-pass').value.trim();
+  if(!name||!email||!pass){ showNotif('Completa todos los campos'); return; }
+  if(pass.length < 6){ showNotif('La contraseña debe tener al menos 6 caracteres'); return; }
+  if(usuarios.find(u=>u.email===email)){ showNotif('Ese correo ya está registrado'); return; }
+  const nu = { id: nextUserId++, name, email, pass, rol:'cliente', estado:'activo' };
+  usuarios.push(nu);
+  currentUser = nu;
+  afterLogin();
+}
+
+function afterLogin(){
+  document.getElementById('navbar').classList.remove('hidden');
+  document.getElementById('nav-username').textContent = currentUser.name;
+  const badge = document.getElementById('nav-role-badge');
+  badge.textContent = currentUser.rol === 'admin' ? 'Admin' : 'Cliente';
+  badge.classList.remove('hidden');
+  const adminBtn  = document.getElementById('nav-admin');
+  const clientBtn = document.getElementById('nav-cliente');
+  if(currentUser.rol==='admin'){
+    adminBtn.classList.remove('hidden');
+    clientBtn.classList.remove('hidden');
+    showView('admin');
+  } else {
+    clientBtn.classList.remove('hidden');
+    showView('home');
+  }
+  updateClienteView();
+  showNotif('¡Bienvenido, ' + currentUser.name.split(' ')[0] + '!');
+}
+
+function logout(){
+  currentUser = null;
+  document.getElementById('navbar').classList.add('hidden');
+  ['nav-admin','nav-cliente'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+  showView('login');
+  switchLoginTab('login');
+}
+
+
+function showView(v){
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  document.querySelectorAll('.nav-links button').forEach(b=>b.classList.remove('active'));
+  const nb = document.getElementById('nav-'+v);
+  if(nb) nb.classList.add('active');
+  window.scrollTo(0,0);
+  if(v==='destinos') renderDestinos(activeFilter);
+  if(v==='admin')   renderAdmin();
+}
+function goHome(){ if(currentUser) showView('home'); }
+
+function switchLoginTab(tab){
+  document.getElementById('login-form').classList.toggle('hidden', tab!=='login');
+  document.getElementById('register-form').classList.toggle('hidden', tab!=='register');
+  document.querySelectorAll('.tab-switch button').forEach((b,i)=>{
+    b.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='register'));
+  });
+}
+
+
+function createCard(d, onclick){
+  return `
+  <div class="dest-card" onclick="${onclick}">
+
+    <div class="dest-card-img">
+      <img src="${d.imgCard}" alt="${d.nombre}">
+    </div>
+
+    <div class="dest-card-body">
+      <div class="region">${d.region} · ${d.cat}</div>
+
+      <h3>${d.nombre}</h3>
+
+      <p>${d.descCorta}</p>
+
+      <div class="dest-card-footer">
+        <span class="rating">${d.rating}</span>
+        <span class="price">${d.visitas}</span>
+      </div>
+    </div>
+
+  </div>`;
+}
+
+function renderHomeCards(){
+  document.getElementById('home-cards').innerHTML =
+    DESTINOS.slice(0,3).map(d=>createCard(d,`openDetalle(${d.id})`)).join('');
+}
+
+function renderDestinos(filter){
+  activeFilter = filter;
+  const cats = ['Todos',...new Set(DESTINOS.map(d=>d.cat))];
+  document.getElementById('filter-bar').innerHTML = cats.map(c=>
+    `<button class="filter-btn${c===filter?' active':''}" onclick="renderDestinos('${c}')">${c}</button>`
+  ).join('');
+  const list = filter==='Todos'?DESTINOS:DESTINOS.filter(d=>d.cat===filter);
+  document.getElementById('destinos-cards').innerHTML = list.map(d=>createCard(d,`openDetalle(${d.id})`)).join('');
+}
+
+function openDetalle(id){
+
+  const d = DESTINOS.find(x=>x.id===id);
+
+  if(!d) return;
+
+  currentDest = d;
+
+  document.getElementById('detalle-hero').style.background =
+  `url('${d.imgDetalle}') center/cover no-repeat`;
+
+  document.getElementById('detalle-region').textContent =
+  d.region+' · '+d.cat;
+
+  document.getElementById('detalle-titulo').textContent =
+  d.nombre;
+
+  document.getElementById('detalle-subtitle').textContent =
+  'Sobre '+d.nombre;
+
+  document.getElementById('detalle-desc').textContent =
+  d.descFull;
+
+  document.getElementById('detalle-extra').textContent =
+  d.extra;
+
+  document.getElementById('detalle-highlights').innerHTML =
+  d.highlights.map(h=>
+    `<span class="highlight-tag">${h}</span>`
+  ).join('');
+
+  document.getElementById('info-region').textContent =
+  d.region;
+
+  document.getElementById('info-clima').textContent =
+  d.clima;
+
+  document.getElementById('info-epoca').textContent =
+  d.epoca;
+
+  document.getElementById('info-dif').textContent =
+  d.dif;
+
+  document.getElementById('info-entrada').textContent =
+  d.entrada;
+
+  showView('detalle');
+}
+
+function renderAdmin(){
+  document.getElementById('kpi-users').textContent = usuarios.length;
+  document.getElementById('kpi-dest').textContent  = DESTINOS.length;
+  renderAdminUsers();
+  renderAdminDest();
+}
+
+function adminPanel(p){
+  document.querySelectorAll('.admin-panel').forEach(el=>el.classList.remove('active'));
+  document.getElementById('panel-'+p).classList.add('active');
+  document.querySelectorAll('.sidebar-menu button').forEach(b=>b.classList.remove('active'));
+  const sb = document.getElementById('sb-'+p);
+  if(sb) sb.classList.add('active');
+}
+
+function renderAdminUsers(){
+  document.getElementById('admin-users-table').innerHTML = usuarios.map(u=>`
+    <tr>
+      <td>${u.id}</td><td>${u.name}</td><td>${u.email}</td>
+      <td><span class="badge ${u.rol==='admin'?'badge-blue':'badge-green'}">${u.rol}</span></td>
+      <td><span class="badge ${u.estado==='activo'?'badge-green':'badge-red'}">${u.estado}</span></td>
+      <td>
+        <button class="btn btn-outline" style="padding:4px 10px;font-size:.75rem;" onclick="toggleUser(${u.id})">
+          ${u.estado==='activo'?'Bloquear':'Activar'}
+        </button>
+      </td>
+    </tr>`).join('');
+}
+
+function renderAdminDest(){
+  document.getElementById('admin-dest-table').innerHTML = DESTINOS.map(d=>`
+    <tr>
+      <td>${d.emoji} ${d.nombre}</td>
+      <td>${d.region}</td>
+      <td><span class="badge badge-blue">${d.cat}</span></td>
+      <td><span class="badge badge-green">Publicado</span></td>
+      <td>
+        <button class="btn btn-outline" style="padding:4px 10px;font-size:.75rem;" onclick="showNotif('Edición próximamente')">Editar</button>
+        <button class="btn btn-danger"  style="padding:4px 10px;font-size:.75rem;margin-left:4px;" onclick="showNotif('Función en desarrollo')">Eliminar</button>
+      </td>
+    </tr>`).join('');
+}
+
+function toggleUser(id){
+  const u = usuarios.find(x=>x.id===id);
+  if(!u) return;
+  u.estado = u.estado==='activo'?'bloqueado':'activo';
+  renderAdminUsers();
+  showNotif('Usuario '+u.estado);
+}
+
+function addUser(){
+  const name  = document.getElementById('m-name').value.trim();
+  const email = document.getElementById('m-email').value.trim();
+  const pass  = document.getElementById('m-pass').value.trim();
+  const rol   = document.getElementById('m-rol').value;
+  if(!name||!email||!pass){ showNotif('Completa todos los campos'); return; }
+  usuarios.push({ id:nextUserId++, name, email, pass, rol, estado:'activo' });
+  closeModal('addUser');
+  renderAdminUsers();
+  document.getElementById('kpi-users').textContent = usuarios.length;
+  showNotif('Usuario creado exitosamente');
+}
+
+function saveDestino(){
+  const n = document.getElementById('nd-nombre').value.trim();
+  if(!n){ showNotif('Escribe el nombre del destino'); return; }
+  const nd = {
+    id: DESTINOS.length + 1,
+    nombre: n,
+    region: document.getElementById('nd-region').value||'Guatemala',
+    cat:    document.getElementById('nd-cat').value,
+    emoji:  document.getElementById('nd-emoji').value||'📍',
+    descCorta: document.getElementById('nd-desc-short').value||'Nuevo destino turístico.',
+    descFull:  document.getElementById('nd-desc-full').value||'',
+    extra: '',
+    highlights: [document.getElementById('nd-cat').value],
+    clima: document.getElementById('nd-clima').value||'Templado',
+    epoca: document.getElementById('nd-epoca').value||'Todo el año',
+    dif:   document.getElementById('nd-dif').value,
+    entrada: document.getElementById('nd-precio').value||'Libre',
+    bg: 'linear-gradient(135deg,#1a6e3c,#0e4d2a)',
+    rating:'★★★★☆', visitas:'Nuevo'
+  };
+  DESTINOS.push(nd);
+  adminPanel('destinos-admin');
+  renderAdminDest();
+  document.getElementById('kpi-dest').textContent = DESTINOS.length;
+  showNotif('¡Destino "'+nd.nombre+'" publicado!');
+}
+
+function updateClienteView(){
+  if(!currentUser) return;
+  document.getElementById('cliente-nombre').textContent = currentUser.name;
+  document.getElementById('cliente-email').textContent  = currentUser.email;
+  document.getElementById('profile-name').textContent   = currentUser.name;
+  document.getElementById('profile-email').textContent  = currentUser.email;
+  document.getElementById('edit-name').value            = currentUser.name;
+  document.getElementById('profile-avatar').textContent = currentUser.name[0].toUpperCase();
+  // Favorites (demo)
+  const favs = DESTINOS.slice(0,3);
+  document.getElementById('fav-grid').innerHTML = favs.map(d=>`
+  <div class="fav-card" onclick="openDetalle(${d.id})">
+
+    <div class="fav-card-img">
+      <img src="${d.imgCard}" alt="${d.nombre}">
+    </div>
+
+    <div class="fav-card-body">
+      <h4>${d.nombre}</h4>
+      <p>${d.region}</p>
+    </div>
+
+  </div>
+`).join('');
+  // Recommendations
+  document.getElementById('rec-cards').innerHTML =
+    DESTINOS.slice(3,6).map(d=>createCard(d,`openDetalle(${d.id})`)).join('');
+}
+
+
+function showModal(id){ document.getElementById('modal-'+id).classList.add('open'); }
+function closeModal(id){ document.getElementById('modal-'+id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m=>{
+  m.addEventListener('click', e=>{ if(e.target===m) m.classList.remove('open'); });
+});
+
+
+let notifTimer;
+function showNotif(msg){
+  const el = document.getElementById('notif');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(notifTimer);
+  notifTimer = setTimeout(()=>el.classList.remove('show'), 3000);
+}
+
+renderHomeCards();
+renderDestinos('Todos');
+</script>
+</body>
+</html>

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TRavelGT</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav id="navbar" class="hidden">
+  <div class="nav-brand" onclick="goHome()">🌋 Descubre Guatemala</div>
+  <div class="nav-links" id="nav-links">
+    <button onclick="showView('home')" id="nav-home">Inicio</button>
+    <button onclick="showView('destinos')" id="nav-destinos">Destinos</button>
+    <button onclick="showView('cliente')" id="nav-cliente" class="hidden">Mi Cuenta</button>
+    <button onclick="showView('admin')" id="nav-admin" class="hidden">Admin</button>
+  </div>
+  <div class="nav-user">
+    <span id="nav-username"></span>
+    <span class="nav-badge hidden" id="nav-role-badge"></span>
+    <button class="btn btn-outline" style="padding:6px 16px;font-size:.8rem;" onclick="logout()">Salir</button>
+  </div>
+</nav>
+
+<div class="notif" id="notif"></div>
+
+
+<div id="view-login" class="view active">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="flag">TravelGT</div>
+      <h1>Descubre Guatemala</h1>
+      <p>No sabes a donde ir, entra y dejate llevar</p>
+    </div>
+
+    <div class="tab-switch" id="login-tabs">
+      <button class="active" onclick="switchLoginTab('login')">Ingresar</button>
+      <button onclick="switchLoginTab('register')">Registrarse</button>
+    </div>
+
+    <!-- FORMULARIO DE INICIO DE SESION -->
+    <div id="login-form">
+      <div id="login-error" class="login-error hidden">Usuario o contraseña incorrectos.</div>
+      <div class="form-group">
+        <label>Correo electrónico</label>
+        <input type="email" id="login-email" placeholder="correo@ejemplo.com" value="admin@guatemala.com"/>
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" id="login-pass" placeholder="••••••••" value="admin123"/>
+      </div>
+      <button class="btn btn-primary form-btn" onclick="doLogin()">Entrar al sitio</button>
+    </div>
+
+    <!-- FORMULARIO DE REGISTRO-->
+    <div id="register-form" class="hidden">
+      <div class="form-group">
+        <label>Nombre completo</label>
+        <input type="text" id="reg-name" placeholder="Tu nombre"/>
+      </div>
+      <div class="form-group">
+        <label>Correo electrónico</label>
+        <input type="email" id="reg-email" placeholder="correo@ejemplo.com"/>
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" id="reg-pass" placeholder="Mínimo 6 caracteres"/>
+      </div>
+      <button class="btn btn-primary form-btn" onclick="doRegister()">Crear cuenta</button>
+    </div>
+  </div>
+</div>
+
+<!-- VISTA DE PAGINA PRINCIPAL-->
+<div id="view-home" class="view">
+  <div class="hero">
+    <div class="hero-content">
+      <div class="subtitle">✦ Corazón de Mesoamérica ✦</div>
+      <h1>Un país de leyendas, volcanes y colores</h1>
+      <p>Desde la majestuosidad de Tikal hasta la serenidad del Lago Atitlán, Guatemala te espera con paisajes que transforman el alma.</p>
+      <div class="hero-btns">
+        <button class="btn btn-gold" onclick="showView('destinos')">Explorar Destinos</button>
+        <button class="btn btn-outline" style="color:#fff;border-color:#fff;" onclick="showView('destinos')">Ver el mapa</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-item"><div class="num">22</div><div class="lbl">Departamentos</div></div>
+    <div class="stat-item"><div class="num">3</div><div class="lbl">Sitios UNESCO</div></div>
+    <div class="stat-item"><div class="num">37</div><div class="lbl">Volcanes</div></div>
+    <div class="stat-item"><div class="num">24</div><div class="lbl">Idiomas Mayas</div></div>
+    <div class="stat-item"><div class="num">+200</div><div class="lbl">Destinos</div></div>
+  </div>
+
+  <div style="max-width:1200px;margin:0 auto;">
+    <div class="section">
+      <div class="section-header">
+        <div class="tag">Lugares imperdibles</div>
+        <h2>Destinos más visitados</h2>
+        <p>Descubre los rincones más fascinantes del país eterno, tierra de bosques, ruinas y tradiciones vivas.</p>
+      </div>
+      <div class="cards-grid" id="home-cards"></div>
+      <div style="text-align:center;margin-top:40px;">
+        <button class="btn btn-primary" onclick="showView('destinos')">Ver todos los destinos →</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--azul-maya);color:#fff;padding:80px 40px;text-align:center;">
+    <h2 style="font-size:2.2rem;margin-bottom:14px;">¿Listo para tu aventura?</h2>
+    <p style="opacity:.7;max-width:480px;margin:0 auto 28px;line-height:1.7;">Guatemala te ofrece experiencias auténticas que permanecen para siempre en la memoria.</p>
+    <button class="btn btn-gold" onclick="showView('destinos')">Planifica tu viaje</button>
+  </div>
+
+  <footer>
+    <strong>Descubre Guatemala</strong> &copy; 2025 — Turismo auténtico, cultura viva.
+  </footer>
+</div>
+
+<!-- VISTA SECCIÓN DESTINOS -->
+<div id="view-destinos" class="view">
+  <div class="page-header">
+    <div class="breadcrumb">Inicio <span>/</span> Destinos</div>
+    <h2>Todos los Destinos</h2>
+    <p>Explora los lugares más increíbles de Guatemala</p>
+  </div>
+
+  <div class="filter-bar" id="filter-bar"></div>
+
+  <div class="destinos-grid">
+    <div class="cards-grid" id="destinos-cards"></div>
+  </div>
+
+  <footer>
+    <strong>Descubre Guatemala</strong> &copy; 2025 — Turismo auténtico, cultura viva.
+  </footer>
+</div>
+
+<!-- VISTA DE DETALLES -->
+<div id="view-detalle" class="view">
+  <div class="detalle-hero" id="detalle-hero">
+    <div class="detalle-hero-content">
+      <span class="region-tag" id="detalle-region">Región</span>
+      <h2 id="detalle-titulo">Nombre del Destino</h2>
+    </div>
+  </div>
+
+  <div class="detalle-body">
+    <button class="btn btn-outline" onclick="showView('destinos')" style="margin-bottom:28px;">← Volver a Destinos</button>
+    <div class="detalle-layout">
+      <div class="detalle-main">
+        <h3 id="detalle-subtitle">Descripción</h3>
+        <p id="detalle-desc"></p>
+        <div id="detalle-highlights" class="highlights"></div>
+        <p id="detalle-extra" style="color:var(--gris);line-height:1.8;"></p>
+      </div>
+      <div class="info-card">
+        <h4>Información práctica</h4>
+        <div class="info-row"><span class="lbl">Región</span><span class="val" id="info-region"></span></div>
+        <div class="info-row"><span class="lbl">Clima</span><span class="val" id="info-clima"></span></div>
+        <div class="info-row"><span class="lbl">Mejor época</span><span class="val" id="info-epoca"></span></div>
+        <div class="info-row"><span class="lbl">Dificultad</span><span class="val" id="info-dif"></span></div>
+        <div class="info-row"><span class="lbl">Entrada</span><span class="val" id="info-entrada"></span></div>
+        <div style="margin-top:20px;">
+          <button class="btn btn-primary" style="width:100%;margin-bottom:10px;" onclick="showNotif('¡Destino guardado en favoritos!')">♥ Guardar favorito</button>
+          <button class="btn btn-outline" style="width:100%;" onclick="showNotif('Compartiendo destino...')">↗ Compartir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <strong>Descubre Guatemala</strong> &copy; 2025
+  </footer>
+</div>
+
+<!-- VISTA DE ADMINISTRADOR -->
+<div id="view-admin" class="view">
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="sidebar-title">Panel de Administración</div>
+      <ul class="sidebar-menu">
+        <li><button class="active" onclick="adminPanel('dashboard')" id="sb-dashboard"><span class="icon">📊</span> Dashboard</button></li>
+        <li><button onclick="adminPanel('usuarios')" id="sb-usuarios"><span class="icon">👥</span> Usuarios</button></li>
+        <li><button onclick="adminPanel('destinos-admin')" id="sb-destinos-admin"><span class="icon">🗺️</span> Destinos</button></li>
+        <li><button onclick="adminPanel('nuevo-destino')" id="sb-nuevo-destino"><span class="icon">➕</span> Nuevo Destino</button></li>
+        <li><button onclick="logout()" style="color:rgba(255,100,100,.8)!important;"><span class="icon">🚪</span> Cerrar sesión</button></li>
+      </ul>
+    </aside>
+
+    <main class="admin-main">
+
+      <!-- Dashboard -->
+      <div class="admin-panel active" id="panel-dashboard">
+        <h2 class="admin-title">Dashboard</h2>
+        <p class="admin-subtitle">Resumen general del sitio</p>
+        <div class="kpi-grid">
+          <div class="kpi-card"><div class="kpi-val" id="kpi-users">—</div><div class="kpi-lbl">Usuarios registrados</div></div>
+          <div class="kpi-card gold"><div class="kpi-val" id="kpi-dest">—</div><div class="kpi-lbl">Destinos publicados</div></div>
+          <div class="kpi-card blue"><div class="kpi-val">1,240</div><div class="kpi-lbl">Visitas este mes</div></div>
+          <div class="kpi-card red"><div class="kpi-val">3</div><div class="kpi-lbl">Pendientes revisión</div></div>
+        </div>
+        <div class="admin-table-card">
+          <div class="table-header"><h4>Actividad reciente</h4></div>
+          <table>
+            <thead><tr><th>Acción</th><th>Usuario</th><th>Fecha</th><th>Estado</th></tr></thead>
+            <tbody>
+              <tr><td>Nuevo registro</td><td>maria@correo.com</td><td>Hoy 09:14</td><td><span class="badge badge-green">OK</span></td></tr>
+              <tr><td>Destino editado</td><td>admin</td><td>Hoy 08:30</td><td><span class="badge badge-blue">Info</span></td></tr>
+              <tr><td>Comentario pendiente</td><td>pedro@correo.com</td><td>Ayer 17:22</td><td><span class="badge badge-yellow">Pendiente</span></td></tr>
+              <tr><td>Usuario bloqueado</td><td>spam@test.com</td><td>Ayer 11:05</td><td><span class="badge badge-red">Bloqueado</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Usuarios -->
+      <div class="admin-panel" id="panel-usuarios">
+        <h2 class="admin-title">Gestión de Usuarios</h2>
+        <p class="admin-subtitle">Administra las cuentas del sistema</p>
+        <div class="admin-table-card">
+          <div class="table-header">
+            <h4>Usuarios registrados</h4>
+            <button class="btn btn-primary" style="padding:8px 18px;" onclick="showModal('addUser')">+ Agregar</button>
+          </div>
+          <table>
+            <thead><tr><th>#</th><th>Nombre</th><th>Correo</th><th>Rol</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody id="admin-users-table"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Administrador seccion Destinos -->
+      <div class="admin-panel" id="panel-destinos-admin">
+        <h2 class="admin-title">Gestión de Destinos</h2>
+        <p class="admin-subtitle">Administra los lugares turísticos del sitio</p>
+        <div class="admin-table-card">
+          <div class="table-header">
+            <h4>Destinos publicados</h4>
+            <button class="btn btn-primary" style="padding:8px 18px;" onclick="adminPanel('nuevo-destino')">+ Nuevo</button>
+          </div>
+          <table>
+            <thead><tr><th>Nombre</th><th>Región</th><th>Categoría</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody id="admin-dest-table"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Nuevo Destino -->
+      <div class="admin-panel" id="panel-nuevo-destino">
+        <h2 class="admin-title">Agregar Nuevo Destino</h2>
+        <p class="admin-subtitle">Completa la información del lugar turístico</p>
+        <div class="form-card">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Nombre del destino</label>
+              <input type="text" id="nd-nombre" placeholder="ej. Lago Atitlán"/>
+            </div>
+            <div class="form-group">
+              <label>Región / Departamento</label>
+              <input type="text" id="nd-region" placeholder="ej. Sololá"/>
+            </div>
+            <div class="form-group">
+              <label>Categoría</label>
+              <select id="nd-cat">
+                <option>Natural</option>
+                <option>Arqueológico</option>
+                <option>Cultural</option>
+                <option>Colonial</option>
+                <option>Aventura</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Emoji / Ícono</label>
+              <input type="text" id="nd-emoji" placeholder="ej. 🌋" maxlength="4"/>
+            </div>
+            <div class="form-group span-2">
+              <label>Descripción corta</label>
+              <input type="text" id="nd-desc-short" placeholder="Descripción breve para las tarjetas"/>
+            </div>
+            <div class="form-group span-2">
+              <label>Descripción completa</label>
+              <textarea id="nd-desc-full" placeholder="Descripción detallada del destino..."></textarea>
+            </div>
+            <div class="form-group">
+              <label>Clima</label>
+              <input type="text" id="nd-clima" placeholder="ej. Templado húmedo"/>
+            </div>
+            <div class="form-group">
+              <label>Mejor época para visitar</label>
+              <input type="text" id="nd-epoca" placeholder="ej. Nov – Abril"/>
+            </div>
+            <div class="form-group">
+              <label>Dificultad de acceso</label>
+              <select id="nd-dif">
+                <option>Fácil</option>
+                <option>Moderada</option>
+                <option>Difícil</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Entrada / Precio aprox.</label>
+              <input type="text" id="nd-precio" placeholder="ej. Q50 / Gratis"/>
+            </div>
+          </div>
+          <div style="margin-top:20px;display:flex;gap:12px;">
+            <button class="btn btn-primary" onclick="saveDestino()">✓ Publicar destino</button>
+            <button class="btn btn-outline" onclick="adminPanel('destinos-admin')">Cancelar</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Vista visitante -->
+<div id="view-cliente" class="view">
+  <div class="cliente-header">
+    <div class="welcome">Bienvenido de vuelta</div>
+    <h2 id="cliente-nombre">Viajero</h2>
+    <p style="opacity:.7;margin-top:6px;" id="cliente-email">email@correo.com</p>
+  </div>
+
+  <div class="cliente-content">
+    <div class="cliente-grid">
+      <div>
+        <h3 class="cliente-section-title">Mis Favoritos</h3>
+        <div class="fav-grid" id="fav-grid"></div>
+      </div>
+      <div>
+        <h3 class="cliente-section-title">Mi Perfil</h3>
+        <div class="profile-card">
+          <div class="profile-avatar" id="profile-avatar">A</div>
+          <h3 id="profile-name">Nombre</h3>
+          <p class="email" id="profile-email">email</p>
+          <div class="profile-form">
+            <div class="form-group">
+              <label>Nombre</label>
+              <input type="text" id="edit-name" placeholder="Tu nombre completo"/>
+            </div>
+            <div class="form-group">
+              <label>Teléfono</label>
+              <input type="text" placeholder="+502 0000-0000"/>
+            </div>
+            <div class="form-group">
+              <label>Ciudad</label>
+              <input type="text" placeholder="Guatemala City"/>
+            </div>
+            <button class="btn btn-primary" onclick="showNotif('¡Perfil actualizado!')">Guardar cambios</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:40px;">
+      <h3 class="cliente-section-title">Destinos recomendados para ti</h3>
+      <div class="cards-grid" id="rec-cards" style="margin-top:18px;"></div>
+    </div>
+  </div>
+
+  <footer>
+    <strong>Descubre Guatemala</strong> &copy; 2025
+  </footer>
+</div>
+
+<!-- AGREGAR USUARIO -->
+<div class="modal-overlay" id="modal-addUser">
+  <div class="modal">
+    <h3>Agregar Usuario</h3>
+    <p>Completa los datos del nuevo usuario del sistema.</p>
+    <div class="form-group"><label>Nombre</label><input type="text" id="m-name" placeholder="Nombre completo"/></div>
+    <div class="form-group"><label>Correo</label><input type="email" id="m-email" placeholder="correo@ejemplo.com"/></div>
+    <div class="form-group"><label>Contraseña</label><input type="password" id="m-pass" placeholder="••••••••"/></div>
+    <div class="form-group"><label>Rol</label>
+      <select id="m-rol"><option value="cliente">Cliente</option><option value="admin">Admin</option></select>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-primary" onclick="addUser()">Crear usuario</button>
+      <button class="btn btn-outline" onclick="closeModal('addUser')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Script -->
+<script src="app.js"></script>
+</body>
+</html>
