@@ -1,108 +1,161 @@
+// ===================== CONFIG =====================
 const API_BASE = "https://api.travel.cadgt.com";
 
-// ================= NOTIFICACIÓN =================
-function showNotif(msg){
-  const el = document.getElementById("notif");
-  el.textContent = msg;
-  el.classList.add("show");
-  setTimeout(()=>el.classList.remove("show"),3000);
+// ===================== STATE =====================
+let currentUser = null;
+let destinos = [];
+
+// ===================== INIT =====================
+document.addEventListener("DOMContentLoaded", () => {
+  switchView("view-login");
+  loadDestinos();
+  renderHomeCards();
+});
+
+// ===================== NAV / VIEWS =====================
+function showView(view) {
+  document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+  document.getElementById("view-" + view).classList.add("active");
 }
 
-// ================= TAB LOGIN =================
-function switchLoginTab(tab){
+function goHome() {
+  showView("home");
+}
 
-  const login = document.getElementById("login-form");
-  const register = document.getElementById("register-form");
+// ===================== NOTIFICACIONES =====================
+function showNotif(msg) {
+  const n = document.getElementById("notif");
+  n.textContent = msg;
+  n.classList.add("show");
 
+  setTimeout(() => {
+    n.classList.remove("show");
+  }, 2500);
+}
+
+// ===================== LOGIN TABS =====================
+function switchLoginTab(tab) {
+  const loginForm = document.getElementById("login-form");
+  const registerForm = document.getElementById("register-form");
   const tabs = document.querySelectorAll(".tab-switch button");
 
-  if(tab === "login"){
-    login.classList.remove("hidden");
-    register.classList.add("hidden");
-    tabs[0].classList.add("active");
-    tabs[1].classList.remove("active");
-  }
+  tabs.forEach(t => t.classList.remove("active"));
 
-  if(tab === "register"){
-    login.classList.add("hidden");
-    register.classList.remove("hidden");
-    tabs[0].classList.remove("active");
+  if (tab === "login") {
+    loginForm.classList.remove("hidden");
+    registerForm.classList.add("hidden");
+    tabs[0].classList.add("active");
+  } else {
+    loginForm.classList.add("hidden");
+    registerForm.classList.remove("hidden");
     tabs[1].classList.add("active");
   }
 }
 
-// ================= LOGIN =================
-async function doLogin(){
+// ===================== REGISTER =====================
+async function doRegister() {
+  try {
+    const name = document.getElementById("reg-name").value;
+    const email = document.getElementById("reg-email").value;
+    const pass = document.getElementById("reg-pass").value;
 
-  const email = document.getElementById("login-email").value.trim();
-  const password = document.getElementById("login-pass").value.trim();
+    const res = await fetch(`${API_BASE}/api/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, password: pass })
+    });
 
-  const r = await fetch(`${API_BASE}/api/login`,{
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify({email,password})
-  });
+    const data = await res.json();
 
-  const data = await r.json();
+    if (!data.success) {
+      showNotif(data.message || "Error al registrar");
+      return;
+    }
 
-  if(!data.success){
-    document.getElementById("login-error").classList.remove("hidden");
-    return;
+    showNotif("Cuenta creada correctamente");
+    switchLoginTab("login");
+
+  } catch (err) {
+    console.error(err);
+    showNotif("Error de conexión con el servidor");
   }
-
-  currentUser = data.usuario;
-
-  afterLogin();
 }
 
-// ================= REGISTER =================
-async function doRegister(){
+// ===================== LOGIN =====================
+async function doLogin() {
+  try {
+    const email = document.getElementById("login-email").value;
+    const pass = document.getElementById("login-pass").value;
 
-  const nombre = document.getElementById("reg-name").value.trim();
-  const email = document.getElementById("reg-email").value.trim();
-  const password = document.getElementById("reg-pass").value.trim();
+    const res = await fetch(`${API_BASE}/api/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password: pass })
+    });
 
-  const r = await fetch(`${API_BASE}/api/register`,{
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify({nombre,email,password})
-  });
+    const data = await res.json();
 
-  const data = await r.json();
+    if (!data.success) {
+      document.getElementById("login-error").classList.remove("hidden");
+      return;
+    }
 
-  if(!data.success){
-    showNotif(data.message);
-    return;
+    currentUser = data.user;
+
+    document.getElementById("navbar").classList.remove("hidden");
+    document.getElementById("nav-username").textContent = currentUser.name;
+
+    showNotif("Bienvenido " + currentUser.name);
+    showView("home");
+
+  } catch (err) {
+    console.error(err);
+    showNotif("Error de conexión");
   }
-
-  showNotif("Usuario registrado correctamente");
-  switchLoginTab("login");
 }
 
-// ================= STATE =================
-let currentUser = null;
-
-// ================= AFTER LOGIN =================
-function afterLogin(){
-  document.getElementById("navbar").classList.remove("hidden");
-  document.getElementById("nav-username").textContent = currentUser.nombre;
-
-  showView("home");
-}
-
-// ================= VIEWS =================
-function showView(v){
-
-  document.querySelectorAll(".view").forEach(e=>e.classList.remove("active"));
-  document.getElementById("view-"+v).classList.add("active");
-}
-
-function goHome(){
-  if(currentUser) showView("home");
-}
-
-function logout(){
+// ===================== LOGOUT =====================
+function logout() {
   currentUser = null;
   document.getElementById("navbar").classList.add("hidden");
   showView("login");
+}
+
+// ===================== DESTINOS =====================
+async function loadDestinos() {
+  try {
+    const res = await fetch(`${API_BASE}/api/destinos`);
+    const data = await res.json();
+    destinos = data.destinos || [];
+    renderHomeCards();
+  } catch (e) {
+    console.error("Error destinos", e);
+  }
+}
+
+// ===================== RENDER HOME =====================
+function renderHomeCards() {
+  const container = document.getElementById("home-cards");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  destinos.slice(0, 6).forEach(d => {
+    container.innerHTML += `
+      <div class="dest-card" onclick="showNotif('Destino: ${d.nombre}')">
+        <div class="dest-card-img">${d.emoji || "🏞️"}</div>
+        <div class="dest-card-body">
+          <div class="region">${d.region}</div>
+          <h3>${d.nombre}</h3>
+          <p>${d.descripcion}</p>
+        </div>
+      </div>
+    `;
+  });
+}
+
+// ===================== ADMIN STUB =====================
+function adminPanel(panel) {
+  document.querySelectorAll(".admin-panel").forEach(p => p.classList.remove("active"));
+  document.getElementById("panel-" + panel).classList.add("active");
 }
