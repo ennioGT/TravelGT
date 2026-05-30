@@ -378,58 +378,130 @@ function renderDestinos(
 // ================= DETALLE =================
 function openDetalle(id) {
 
-  const d =
-    destinos.find(
-      x =>
-        Number(x.id) ===
-        Number(id)
+    const d = destinos.find(
+        x => Number(x.id) === Number(id)
     );
 
-  if (!d) {
+    if (!d) {
+        showNotif("Destino no encontrado");
+        return;
+    }
 
-    showNotif(
-      "Destino no encontrado"
-    );
+    currentDest = d;
 
-    return;
-  }
+    // HERO
 
-  currentDest = d;
+    document.getElementById("detalle-region").textContent =
+        `${d.departamento || ""} · ${d.categoria || ""}`;
 
-  document.getElementById(
-    "detalle-region"
-  ).textContent =
-    `${d.departamento} · ${d.categoria}`;
+    document.getElementById("detalle-titulo").textContent =
+        d.nombre || "";
 
-  document.getElementById(
-    "detalle-titulo"
-  ).textContent =
-    d.nombre;
+    const hero =
+        document.getElementById("detalle-hero");
 
-  document.getElementById(
-    "detalle-desc"
-  ).textContent =
-    d.descripcion ||
-    "Información próximamente.";
+    if (hero) {
 
-  document.getElementById(
-    "info-region"
-  ).textContent =
-    d.departamento;
+        if (d.imagen) {
+            hero.style.backgroundImage =
+                `url('${d.imagen}')`;
+        } else {
+            hero.style.backgroundImage = "none";
+        }
+    }
 
-  const hero =
-    document.getElementById(
-      "detalle-hero"
-    );
+    // DESCRIPCIONES
 
-  if (
-    hero &&
-    d.imagen
-  ) {
+    const desc =
+        document.getElementById("detalle-desc");
 
-    hero.style.backgroundImage =
-      `url('${d.imagen}')`;
-  }
+    if (desc) {
+        desc.textContent =
+            d.descripcion_larga ||
+            d.descripcion ||
+            "";
+    }
 
-  showView("detalle");
+    const extra =
+        document.getElementById("detalle-extra");
+
+    if (extra) {
+        extra.textContent =
+            d.extra ||
+            "";
+    }
+
+    // INFORMACIÓN LATERAL
+
+    const region =
+        document.getElementById("info-region");
+
+    if (region) {
+        region.textContent =
+            d.departamento || "";
+    }
+
+    const clima =
+        document.getElementById("info-clima");
+
+    if (clima) {
+        clima.textContent =
+            d.clima ||
+            "No disponible";
+    }
+
+    const epoca =
+        document.getElementById("info-epoca");
+
+    if (epoca) {
+        epoca.textContent =
+            d.epoca ||
+            "No disponible";
+    }
+
+    const dificultad =
+        document.getElementById("info-dificultad");
+
+    if (dificultad) {
+        dificultad.textContent =
+            d.dificultad ||
+            "No disponible";
+    }
+
+    const entrada =
+        document.getElementById("info-entrada");
+
+    if (entrada) {
+        entrada.textContent =
+            d.entrada ||
+            "No disponible";
+    }
+
+    // HIGHLIGHTS
+
+    const highlights =
+        document.getElementById(
+            "detalle-highlights"
+        );
+
+    if (highlights) {
+
+        highlights.innerHTML = "";
+
+        if (d.highlights) {
+
+            d.highlights
+                .split(",")
+                .forEach(item => {
+
+                    highlights.innerHTML += `
+                        <span class="highlight-tag">
+                            ${item.trim()}
+                        </span>
+                    `;
+                });
+        }
+    }
+
+    showView("detalle");
 }
