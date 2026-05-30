@@ -261,8 +261,7 @@ showNotif(
   "Bienvenido " +
   currentUser.nombre
 );
-console.log(data);
-console.log(data.user);
+
 showView("home");
 
 // ================= LOGOUT =================
