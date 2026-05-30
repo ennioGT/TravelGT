@@ -28,8 +28,12 @@ function showView(view) {
   }
 
   if (view === "destinos") {
-    renderDestinos(activeFilter);
-  }
+  renderDestinos(activeFilter);
+}
+
+if (view === "admin") {
+  adminPanel("dashboard");
+}
 
   window.scrollTo(0, 0);
 }
@@ -580,4 +584,41 @@ function openDetalle(id) {
     }
 
     showView("detalle");
+}
+// ================= ADMIN PANELS =================
+function adminPanel(panel) {
+
+  document
+    .querySelectorAll(".admin-panel")
+    .forEach(p =>
+      p.classList.remove("active")
+    );
+
+  document
+    .querySelectorAll(".sidebar-menu button")
+    .forEach(b =>
+      b.classList.remove("active")
+    );
+
+  const panelElement =
+    document.getElementById(
+      "panel-" + panel
+    );
+
+  if (panelElement) {
+    panelElement.classList.add(
+      "active"
+    );
+  }
+
+  const menuButton =
+    document.getElementById(
+      "sb-" + panel
+    );
+
+  if (menuButton) {
+    menuButton.classList.add(
+      "active"
+    );
+  }
 }
