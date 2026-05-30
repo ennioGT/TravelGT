@@ -1,96 +1,88 @@
-// ===================== CONFIG =====================
 const API_BASE = "https://api.travel.cadgt.com";
 
-// ===================== STATE =====================
 let currentUser = null;
+let token = null;
 let destinos = [];
 
-// ===================== INIT =====================
+// ================= INIT =================
 document.addEventListener("DOMContentLoaded", () => {
-  switchView("view-login");
+  showView("login");
   loadDestinos();
-  renderHomeCards();
 });
 
-// ===================== NAV / VIEWS =====================
+// ================= VIEW =================
 function showView(view) {
   document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
   document.getElementById("view-" + view).classList.add("active");
 }
 
-function goHome() {
-  showView("home");
-}
-
-// ===================== NOTIFICACIONES =====================
+// ================= NOTIF =================
 function showNotif(msg) {
   const n = document.getElementById("notif");
   n.textContent = msg;
   n.classList.add("show");
 
-  setTimeout(() => {
-    n.classList.remove("show");
-  }, 2500);
+  setTimeout(() => n.classList.remove("show"), 2500);
 }
 
-// ===================== LOGIN TABS =====================
+// ================= LOGIN TAB =================
 function switchLoginTab(tab) {
-  const loginForm = document.getElementById("login-form");
-  const registerForm = document.getElementById("register-form");
+  const login = document.getElementById("login-form");
+  const register = document.getElementById("register-form");
   const tabs = document.querySelectorAll(".tab-switch button");
 
   tabs.forEach(t => t.classList.remove("active"));
 
   if (tab === "login") {
-    loginForm.classList.remove("hidden");
-    registerForm.classList.add("hidden");
+    login.classList.remove("hidden");
+    register.classList.add("hidden");
     tabs[0].classList.add("active");
   } else {
-    loginForm.classList.add("hidden");
-    registerForm.classList.remove("hidden");
+    login.classList.add("hidden");
+    register.classList.remove("hidden");
     tabs[1].classList.add("active");
   }
 }
 
-// ===================== REGISTER =====================
+// ================= REGISTER =================
 async function doRegister() {
   try {
-    const name = document.getElementById("reg-name").value;
-    const email = document.getElementById("reg-email").value;
-    const pass = document.getElementById("reg-pass").value;
-
     const res = await fetch(`${API_BASE}/api/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password: pass })
+      body: JSON.stringify({
+        nombre: document.getElementById("reg-name").value,
+        email: document.getElementById("reg-email").value,
+        password: document.getElementById("reg-pass").value
+      })
     });
 
     const data = await res.json();
 
     if (!data.success) {
-      showNotif(data.message || "Error al registrar");
+      showNotif(data.message || "Error registro");
       return;
     }
 
-    showNotif("Cuenta creada correctamente");
+    showNotif("Usuario creado");
     switchLoginTab("login");
 
-  } catch (err) {
-    console.error(err);
-    showNotif("Error de conexión con el servidor");
+  } catch (e) {
+    console.error(e);
+    showNotif("Error de conexión");
   }
 }
 
-// ===================== LOGIN =====================
+// ================= LOGIN =================
 async function doLogin() {
   try {
-    const email = document.getElementById("login-email").value;
-    const pass = document.getElementById("login-pass").value;
-
     const res = await fetch(`${API_BASE}/api/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password: pass })
+      body: JSON.stringify({
+        email: document.getElementById("login-email").value,
+        password: document.getElementById("login-pass").value
+      })
     });
 
     const data = await res.json();
@@ -101,61 +93,60 @@ async function doLogin() {
     }
 
     currentUser = data.user;
+    token = data.token;
 
     document.getElementById("navbar").classList.remove("hidden");
-    document.getElementById("nav-username").textContent = currentUser.name;
+    document.getElementById("nav-username").textContent = currentUser.nombre;
 
-    showNotif("Bienvenido " + currentUser.name);
+    showNotif("Bienvenido " + currentUser.nombre);
     showView("home");
 
-  } catch (err) {
-    console.error(err);
-    showNotif("Error de conexión");
+  } catch (e) {
+    console.error(e);
+    showNotif("Error login");
   }
 }
 
-// ===================== LOGOUT =====================
+// ================= LOGOUT =================
 function logout() {
   currentUser = null;
+  token = null;
   document.getElementById("navbar").classList.add("hidden");
   showView("login");
 }
 
-// ===================== DESTINOS =====================
+// ================= DESTINOS =================
 async function loadDestinos() {
   try {
     const res = await fetch(`${API_BASE}/api/destinos`);
     const data = await res.json();
     destinos = data.destinos || [];
+
     renderHomeCards();
   } catch (e) {
-    console.error("Error destinos", e);
+    console.error(e);
   }
 }
 
-// ===================== RENDER HOME =====================
+// ================= RENDER HOME =================
 function renderHomeCards() {
-  const container = document.getElementById("home-cards");
-  if (!container) return;
+  const c = document.getElementById("home-cards");
+  if (!c) return;
 
-  container.innerHTML = "";
+  c.innerHTML = "";
 
   destinos.slice(0, 6).forEach(d => {
-    container.innerHTML += `
-      <div class="dest-card" onclick="showNotif('Destino: ${d.nombre}')">
-        <div class="dest-card-img">${d.emoji || "🏞️"}</div>
+    c.innerHTML += `
+      <div class="dest-card">
+        <div class="dest-card-img">
+          ${d.imagen ? `<img src="${d.imagen}">` : "🏞️"}
+        </div>
         <div class="dest-card-body">
-          <div class="region">${d.region}</div>
+          <div class="region">${d.departamento || ""}</div>
           <h3>${d.nombre}</h3>
-          <p>${d.descripcion}</p>
+          <p>${d.descripcion || ""}</p>
         </div>
       </div>
     `;
   });
-}
-
-// ===================== ADMIN STUB =====================
-function adminPanel(panel) {
-  document.querySelectorAll(".admin-panel").forEach(p => p.classList.remove("active"));
-  document.getElementById("panel-" + panel).classList.add("active");
 }
