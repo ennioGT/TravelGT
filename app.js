@@ -200,29 +200,70 @@ async function doLogin() {
         "hidden"
       );
 
-    document
-      .getElementById(
-        "nav-username"
-      )
-      .textContent =
-      currentUser.nombre;
+    document.getElementById(
+  "nav-username"
+).textContent =
+  currentUser.nombre;
 
-    showNotif(
-      "Bienvenido " +
-      currentUser.nombre
+const badge =
+  document.getElementById(
+    "nav-role-badge"
+  );
+
+badge.classList.remove(
+  "hidden"
+);
+
+badge.textContent =
+  currentUser.rol;
+
+if (
+  currentUser.rol ===
+  "admin"
+) {
+
+  document
+    .getElementById(
+      "nav-admin"
+    )
+    .classList.remove(
+      "hidden"
     );
 
-    showView("home");
-
-  } catch (e) {
-
-    console.error(e);
-
-    showNotif(
-      "Error login"
+  document
+    .getElementById(
+      "nav-cliente"
+    )
+    .classList.add(
+      "hidden"
     );
-  }
+
+} else {
+
+  document
+    .getElementById(
+      "nav-cliente"
+    )
+    .classList.remove(
+      "hidden"
+    );
+
+  document
+    .getElementById(
+      "nav-admin"
+    )
+    .classList.add(
+      "hidden"
+    );
 }
+
+showNotif(
+  "Bienvenido " +
+  currentUser.nombre
+);
+console.log(data);
+console.log(data.user);
+showView("home");
 
 // ================= LOGOUT =================
 function logout() {
@@ -233,6 +274,30 @@ function logout() {
   document
     .getElementById(
       "navbar"
+    )
+    .classList.add(
+      "hidden"
+    );
+
+  document
+    .getElementById(
+      "nav-admin"
+    )
+    .classList.add(
+      "hidden"
+    );
+
+  document
+    .getElementById(
+      "nav-cliente"
+    )
+    .classList.add(
+      "hidden"
+    );
+
+  document
+    .getElementById(
+      "nav-role-badge"
     )
     .classList.add(
       "hidden"
