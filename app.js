@@ -201,68 +201,80 @@ async function doLogin() {
       );
 
     document.getElementById(
-  "nav-username"
-).textContent =
-  currentUser.nombre;
+      "nav-username"
+    ).textContent =
+      currentUser.nombre;
 
-const badge =
-  document.getElementById(
-    "nav-role-badge"
-  );
+    const badge =
+      document.getElementById(
+        "nav-role-badge"
+      );
 
-badge.classList.remove(
-  "hidden"
-);
-
-badge.textContent =
-  currentUser.rol;
-
-if (
-  currentUser.rol ===
-  "admin"
-) {
-
-  document
-    .getElementById(
-      "nav-admin"
-    )
-    .classList.remove(
+    badge.classList.remove(
       "hidden"
     );
 
-  document
-    .getElementById(
-      "nav-cliente"
-    )
-    .classList.add(
-      "hidden"
+    badge.textContent =
+      currentUser.rol;
+
+    if (
+      currentUser.rol ===
+      "admin"
+    ) {
+
+      document
+        .getElementById(
+          "nav-admin"
+        )
+        .classList.remove(
+          "hidden"
+        );
+
+      document
+        .getElementById(
+          "nav-cliente"
+        )
+        .classList.add(
+          "hidden"
+        );
+
+    } else {
+
+      document
+        .getElementById(
+          "nav-cliente"
+        )
+        .classList.remove(
+          "hidden"
+        );
+
+      document
+        .getElementById(
+          "nav-admin"
+        )
+        .classList.add(
+          "hidden"
+        );
+    }
+
+    showNotif(
+      "Bienvenido " +
+      currentUser.nombre
     );
 
-} else {
+    showView("home");
 
-  document
-    .getElementById(
-      "nav-cliente"
-    )
-    .classList.remove(
-      "hidden"
+  } catch (e) {
+
+    console.error(e);
+
+    showNotif(
+      "Error login"
     );
 
-  document
-    .getElementById(
-      "nav-admin"
-    )
-    .classList.add(
-      "hidden"
-    );
+  }
+
 }
-
-showNotif(
-  "Bienvenido " +
-  currentUser.nombre
-);
-
-showView("home");
 
 // ================= LOGOUT =================
 function logout() {
