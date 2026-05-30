@@ -1,4 +1,3 @@
- // ===== Cloudflare D1 API Configuration =====
 const API_BASE = 'https://api.travel.cadgt.com';
 
 async function apiLogin(email, password){
@@ -19,26 +18,35 @@ async function apiRegister(nombre,email,password){
   return await r.json();
 }
 
-
-// ============ DATA (LOCAL DEMO) ============
-let usuarios = [
-  { id:1, name:'Administrador', email:'admin@guatemala.com', pass:'admin123', rol:'admin', estado:'activo' },
-  { id:2, name:'Ennio Muños', email:'Emuñoz@guatemala.com', pass:'cliente123', rol:'cliente', estado:'activo' },
-  { id:3, name:'Ana Patricia', email:'Apatricia@correo.com', pass:'pass123', rol:'cliente', estado:'activo' },
-  { id:4, name:'Emanuel Catalan', email:'ecatalan@correo.com', pass:'pass123', rol:'cliente', estado:'activo' }
-];
-
-let nextUserId = 5;
-
-
-// ============ LOGIN STATE ============
-let currentUser  = null;
-let currentDest  = null;
+// ================= STATE =================
+let currentUser = null;
+let currentDest = null;
 let activeFilter = 'Todos';
 
+// ================= NOTIFICACIONES =================
+let notifTimer;
 
-// ===================== AUTH =====================
+function showNotif(msg){
+  const el = document.getElementById('notif');
+  if(!el) return;
 
+  el.textContent = msg;
+  el.classList.add('show');
+
+  clearTimeout(notifTimer);
+
+  notifTimer = setTimeout(()=>{
+    el.classList.remove('show');
+  }, 3000);
+}
+
+// ================= HOME =================
+function renderHomeCards(){
+  document.getElementById('home-cards').innerHTML =
+    DESTINOS.slice(0,3).map(d=>createCard(d,`openDetalle(${d.id})`)).join('');
+}
+
+// ================= LOGIN =================
 async function doLogin(){
   const email=document.getElementById('login-email').value.trim();
   const pass=document.getElementById('login-pass').value.trim();
@@ -53,7 +61,7 @@ async function doLogin(){
 
     document.getElementById('login-error').classList.add('hidden');
 
-    currentUser = result.usuario; // ✅ FIX IMPORTANTE
+    currentUser = result.usuario;
 
     afterLogin();
 
@@ -62,7 +70,7 @@ async function doLogin(){
   }
 }
 
-
+// ================= REGISTER =================
 async function doRegister(){
   const name=document.getElementById('reg-name').value.trim();
   const email=document.getElementById('reg-email').value.trim();
@@ -77,7 +85,7 @@ async function doRegister(){
     const result = await apiRegister(name,email,pass);
 
     if(!result.success){
-      showNotif(result.message||'No fue posible registrar');
+      showNotif(result.message||'Error al registrar');
       return;
     }
 
@@ -88,106 +96,25 @@ async function doRegister(){
   }
 }
 
-
-// ===================== AFTER LOGIN =====================
-
+// ================= AFTER LOGIN =================
 function afterLogin(){
   document.getElementById('navbar').classList.remove('hidden');
-  document.getElementById('nav-username').textContent = currentUser.nombre || currentUser.name;
+  document.getElementById('nav-username').textContent = currentUser.nombre;
 
   const badge = document.getElementById('nav-role-badge');
-  badge.textContent = currentUser.rol === 'admin' ? 'Admin' : 'Cliente';
-  badge.classList.remove('hidden');
+  badge.textContent = currentUser.rol;
 
-  const adminBtn  = document.getElementById('nav-admin');
-  const clientBtn = document.getElementById('nav-cliente');
+  showView('home');
+  renderHomeCards();
 
-  if(currentUser.rol==='admin'){
-    adminBtn.classList.remove('hidden');
-    clientBtn.classList.remove('hidden');
-    showView('admin');
-  } else {
-    clientBtn.classList.remove('hidden');
-    showView('home');
-  }
-
-  updateClienteView();
-  showNotif('¡Bienvenido, ' + (currentUser.nombre || currentUser.name).split(' ')[0] + '!');
+  showNotif('Bienvenido ' + currentUser.nombre);
 }
 
-
-// ===================== LOGOUT =====================
-
-function logout(){
-  currentUser = null;
-
-  document.getElementById('navbar').classList.add('hidden');
-
-  ['nav-admin','nav-cliente'].forEach(id=>{
-    document.getElementById(id).classList.add('hidden');
-  });
-
-  showView('login');
-  switchLoginTab('login');
-}
-
-
-// ===================== VIEWS =====================
-
+// ================= VIEWS =================
 function showView(v){
   document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
   document.getElementById('view-'+v).classList.add('active');
-
-  document.querySelectorAll('.nav-links button').forEach(b=>b.classList.remove('active'));
-
-  const nb = document.getElementById('nav-'+v);
-  if(nb) nb.classList.add('active');
-
-  window.scrollTo(0,0);
-
-  if(v==='destinos') renderDestinos(activeFilter);
-  if(v==='admin') renderAdmin();
 }
 
-function goHome(){
-  if(currentUser) showView('home');
-}
-
-
-// ===================== LOGIN UI =====================
-
-function switchLoginTab(tab){
-  document.getElementById('login-form').classList.toggle('hidden', tab!=='login');
-  document.getElementById('register-form').classList.toggle('hidden', tab!=='register');
-
-  document.querySelectorAll('.tab-switch button').forEach((b,i)=>{
-    b.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='register'));
-  });
-}
-
-
-// ===================== DESTINOS =====================
-
-function createCard(d, onclick){
-  return `
-  <div class="dest-card" onclick="${onclick}">
-    <div class="dest-card-img">
-      <img src="${d.imgCard}" alt="${d.nombre}">
-    </div>
-    <div class="dest-card-body">
-      <div class="region">${d.region} · ${d.cat}</div>
-      <h3>${d.nombre}</h3>
-      <p>${d.descCorta}</p>
-      <div class="dest-card-footer">
-        <span class="rating">${d.rating}</span>
-        <span class="price">${d.visitas}</span>
-      </div>
-    </div>
-  </div>`;
-}
-
-
-// ===================== INIT =====================
-
+// ================= INIT =================
 renderHomeCards();
-renderDestinos('Todos');
