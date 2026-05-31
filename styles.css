@@ -249,6 +249,256 @@
     .cards-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+   
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --verde:       #1a6e3c;
+      --verde-claro: #27a85a;
+      --dorado:      #c9a84c;
+      --dorado-light:#f0d080;
+      --azul-maya:   #1b3a5c;
+      --crema:       #faf6ee;
+      --texto:       #1c1c1c;
+      --gris:        #6b6b6b;
+      --borde:       #ddd;
+      --sombra:      0 8px 32px rgba(0,0,0,.12);
+    }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--crema);
+      color: var(--texto);
+      min-height: 100vh;
+    }
+    .dest-card-img{
+    width:100%;
+    height:220px;
+    overflow:hidden;
+    }
+
+  .dest-card-img img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    }
+    .hero-image{
+  width:100%;
+  height:320px;
+  overflow:hidden;
+  border-radius:20px;
+}
+
+.hero-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+    h1, h2, h3 { font-family: 'Playfair Display', serif; }
+
+  
+    .hidden   { display: none !important; }
+    .btn {
+      display: inline-block;
+      padding: 12px 28px;
+      border-radius: 4px;
+      font-family: 'Lato', sans-serif;
+      font-weight: 700;
+      font-size: .9rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      transition: all .25s;
+    }
+    .btn-primary   { background: var(--verde); color: #fff; }
+    .btn-primary:hover { background: var(--verde-claro); transform: translateY(-2px); }
+    .btn-gold      { background: var(--dorado); color: #fff; }
+    .btn-gold:hover{ background: var(--dorado-light); color: var(--texto); transform: translateY(-2px); }
+    .btn-outline   { background: transparent; color: var(--verde); border: 2px solid var(--verde); }
+    .btn-outline:hover { background: var(--verde); color: #fff; }
+    .btn-danger    { background: #c0392b; color: #fff; }
+    .btn-danger:hover { background: #e74c3c; }
+
+  
+    .view { display: none !important; }
+    .view.active { display: block !important; }
+    #view-login.active { display: flex !important; }
+
+  
+    #navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--azul-maya);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 64px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.3);
+    }
+    .nav-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; font-weight: 900;
+      color: var(--dorado);
+      letter-spacing: .04em;
+      cursor: pointer;
+    }
+    .nav-links { display: flex; gap: 8px; align-items: center; }
+    .nav-links button {
+      background: none; border: none;
+      color: #cce3f5; font-family: 'Lato', sans-serif;
+      font-size: .88rem; font-weight: 700;
+      letter-spacing: .06em; text-transform: uppercase;
+      padding: 8px 14px; border-radius: 4px;
+      cursor: pointer; transition: all .2s;
+    }
+    .nav-links button:hover,
+    .nav-links button.active { background: var(--verde); color: #fff; }
+    .nav-user {
+      display: flex; align-items: center; gap: 12px;
+      color: #cce3f5; font-size: .85rem;
+    }
+    .nav-badge {
+      background: var(--dorado); color: var(--azul-maya);
+      font-size: .7rem; font-weight: 900;
+      padding: 2px 8px; border-radius: 20px;
+      letter-spacing: .06em; text-transform: uppercase;
+    }
+
+    #view-login {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      background:
+        linear-gradient(135deg, rgba(27,58,92,.82) 0%, rgba(26,110,60,.75) 100%),
+        url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Tikal_temple1_2006_08_11.jpg/1280px-Tikal_temple1_2006_08_11.jpg')
+        center/cover no-repeat;
+    }
+    .login-card {
+      background: rgba(255,255,255,.97);
+      border-radius: 16px;
+      padding: 48px 44px;
+      width: 100%; max-width: 420px;
+      box-shadow: 0 24px 64px rgba(0,0,0,.35);
+      animation: fadeUp .5s ease;
+    }
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(24px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .login-logo {
+      text-align: center; margin-bottom: 28px;
+    }
+    .login-logo .flag { font-size: 2.5rem; }
+    .login-logo h1 { font-size: 1.9rem; color: var(--azul-maya); line-height: 1.1; margin-top: 6px; }
+    .login-logo p  { color: var(--gris); font-size: .85rem; margin-top: 4px; }
+
+    .tab-switch {
+      display: flex; border: 2px solid var(--verde);
+      border-radius: 8px; overflow: hidden; margin-bottom: 28px;
+    }
+    .tab-switch button {
+      flex: 1; padding: 10px;
+      background: none; border: none;
+      font-family: 'Lato', sans-serif;
+      font-weight: 700; font-size: .85rem;
+      text-transform: uppercase; letter-spacing: .06em;
+      cursor: pointer; color: var(--verde);
+      transition: all .2s;
+    }
+    .tab-switch button.active { background: var(--verde); color: #fff; }
+
+    .form-group { margin-bottom: 18px; }
+    .form-group label {
+      display: block; font-size: .82rem;
+      font-weight: 700; color: var(--azul-maya);
+      text-transform: uppercase; letter-spacing: .06em;
+      margin-bottom: 6px;
+    }
+    .form-group input, .form-group select {
+      width: 100%; padding: 11px 14px;
+      border: 2px solid var(--borde); border-radius: 6px;
+      font-family: 'Lato', sans-serif; font-size: .95rem;
+      color: var(--texto); background: #fff;
+      transition: border-color .2s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none; border-color: var(--verde);
+    }
+    .form-btn { width: 100%; padding: 14px; font-size: 1rem; border-radius: 8px; }
+    .login-error {
+      background: #fde8e8; border: 1px solid #e74c3c;
+      color: #c0392b; border-radius: 6px;
+      padding: 10px 14px; font-size: .88rem;
+      margin-bottom: 16px; text-align: center;
+    }
+    .demo-hint {
+      margin-top: 20px; padding: 14px;
+      background: #eef7f2; border-radius: 8px;
+      border-left: 4px solid var(--verde);
+    }
+    .demo-hint p { font-size: .78rem; color: var(--gris); line-height: 1.6; }
+    .demo-hint strong { color: var(--verde); }
+
+    #view-home { padding-top: 64px; }
+
+    .hero {
+      height: 92vh;
+      background:
+        linear-gradient(to bottom, rgba(27,58,92,.5) 0%, rgba(26,110,60,.65) 100%),
+        url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Tikal_temple1_2006_08_11.jpg/1280px-Tikal_temple1_2006_08_11.jpg')
+        center/cover no-repeat;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; color: #fff;
+    }
+    .hero-content { max-width: 760px; padding: 0 20px; animation: fadeUp .7s ease; }
+    .hero-content .subtitle {
+      font-size: .9rem; letter-spacing: .2em;
+      text-transform: uppercase; color: var(--dorado-light);
+      margin-bottom: 16px;
+    }
+    .hero-content h1 {
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      line-height: 1.1; margin-bottom: 20px;
+      text-shadow: 0 2px 16px rgba(0,0,0,.4);
+    }
+    .hero-content p {
+      font-size: 1.1rem; opacity: .92;
+      line-height: 1.7; margin-bottom: 32px;
+    }
+    .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+    .stats-bar {
+      background: var(--azul-maya);
+      display: flex; justify-content: center; gap: 0;
+      flex-wrap: wrap;
+    }
+    .stat-item {
+      padding: 24px 48px;
+      text-align: center; color: #fff;
+      border-right: 1px solid rgba(255,255,255,.12);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-item .num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; font-weight: 900;
+      color: var(--dorado);
+    }
+    .stat-item .lbl { font-size: .78rem; text-transform: uppercase; letter-spacing: .1em; opacity: .7; }
+
+    .section { padding: 80px 40px; max-width: 1200px; margin: 0 auto; }
+    .section-header { text-align: center; margin-bottom: 56px; }
+    .section-header .tag {
+      display: inline-block;
+      font-size: .78rem; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--verde); background: #eef7f2;
+      padding: 4px 14px; border-radius: 20px; margin-bottom: 10px;
+    }
+    .section-header h2 { font-size: 2.4rem; color: var(--azul-maya); margin-bottom: 12px; }
+    .section-header p  { color: var(--gris); font-size: 1rem; max-width: 560px; margin: 0 auto; line-height: 1.7; }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 28px;
     }
     .dest-card {
