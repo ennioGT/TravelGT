@@ -40,7 +40,7 @@
       <button onclick="switchLoginTab('register')">Registrarse</button>
     </div>
 
-    <!-- FORMULARIO DE INICIO DE SESION -->
+   
     <div id="login-form">
       <div id="login-error" class="login-error hidden">Usuario o contraseña incorrectos.</div>
       <div class="form-group">
@@ -54,7 +54,7 @@
       <button class="btn btn-primary form-btn" onclick="doLogin()">Entrar al sitio</button>
     </div>
 
-    <!-- FORMULARIO DE REGISTRO-->
+
     <div id="register-form" class="hidden">
       <div class="form-group">
         <label>Nombre completo</label>
@@ -73,7 +73,7 @@
   </div>
 </div>
 
-<!-- VISTA DE PAGINA PRINCIPAL-->
+
 <div id="view-home" class="view">
   <div class="hero">
     <div class="hero-content">
@@ -139,7 +139,6 @@
   </footer>
 </div>
 
-<!-- VISTA DE DETALLES -->
 <div id="view-detalle" class="view">
   <div class="detalle-hero" id="detalle-hero">
     <div class="detalle-hero-content">
@@ -165,7 +164,7 @@
         <div class="info-row"><span class="lbl">Dificultad</span><span class="val" id="info-dif"></span></div>
         <div class="info-row"><span class="lbl">Entrada</span><span class="val" id="info-entrada"></span></div>
         <div style="margin-top:20px;">
-          <button class="btn btn-primary" style="width:100%;margin-bottom:10px;" onclick="showNotif('¡Destino guardado en favoritos!')">♥ Guardar favorito</button>
+          <button class="btn btn-primary" id="btn-favorito" style="width:100%;margin-bottom:10px;" onclick="toggleFavorito(currentDest && currentDest.id)">♥ Guardar favorito</button>
           <button class="btn btn-outline" style="width:100%;" onclick="showNotif('Compartiendo destino...')">↗ Compartir</button>
         </div>
       </div>
@@ -177,7 +176,6 @@
   </footer>
 </div>
 
-<!-- VISTA DE ADMINISTRADOR -->
 <div id="view-admin" class="view">
   <div class="admin-layout">
     <aside class="admin-sidebar">
@@ -192,8 +190,6 @@
     </aside>
 
     <main class="admin-main">
-
-      <!-- Dashboard -->
       <div class="admin-panel active" id="panel-dashboard">
         <h2 class="admin-title">Dashboard</h2>
         <p class="admin-subtitle">Resumen general del sitio</p>
@@ -216,8 +212,6 @@
           </table>
         </div>
       </div>
-
-      <!-- Usuarios -->
       <div class="admin-panel" id="panel-usuarios">
         <h2 class="admin-title">Gestión de Usuarios</h2>
         <p class="admin-subtitle">Administra las cuentas del sistema</p>
@@ -232,8 +226,6 @@
           </table>
         </div>
       </div>
-
-      <!-- Administrador seccion Destinos -->
       <div class="admin-panel" id="panel-destinos-admin">
         <h2 class="admin-title">Gestión de Destinos</h2>
         <p class="admin-subtitle">Administra los lugares turísticos del sitio</p>
@@ -248,8 +240,6 @@
           </table>
         </div>
       </div>
-
-      <!-- Nuevo Destino -->
       <div class="admin-panel" id="panel-nuevo-destino">
         <h2 class="admin-title">Agregar Nuevo Destino</h2>
         <p class="admin-subtitle">Completa la información del lugar turístico</p>
@@ -316,8 +306,6 @@
     </main>
   </div>
 </div>
-
-<!-- Vista visitante -->
 <div id="view-cliente" class="view">
   <div class="cliente-header">
     <div class="welcome">Bienvenido de vuelta</div>
@@ -366,9 +354,7 @@
     <strong>Descubre Guatemala</strong> &copy; 2025
   </footer>
 </div>
-
-<!-- AGREGAR USUARIO -->
-<div class="modal-overlay" id="modal-addUser">
+<div class="modal-overlay" id="modal-addUser" onclick="if(event.target===this)closeModal('addUser')" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;">
   <div class="modal">
     <h3>Agregar Usuario</h3>
     <p>Completa los datos del nuevo usuario del sistema.</p>
@@ -384,8 +370,6 @@
     </div>
   </div>
 </div>
-
-<!-- Script -->
 <script src="app.js"></script>
 </body>
 </html>
